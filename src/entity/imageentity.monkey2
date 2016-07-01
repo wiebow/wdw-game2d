@@ -61,31 +61,15 @@ Class ImageEntity Extends Entity
 		If Not _images Then Return
 
 		'debug
-		'draw colliosion rect
-		local matrix:= canvas.Matrix
-
-'		canvas.BlendMode = BlendMode.Alpha
-'		canvas.Alpha = 0.5
-'		canvas.Color = Color.Red
-		canvas.Scale(_scale.X, _scale.Y)
-		canvas.DrawEllipse(X,Y, Radius, Radius)
-
-		canvas.Matrix = matrix
+'		canvas.DrawEllipse(X,Y, Radius, Radius)
 
 		canvas.BlendMode = _blend
 		canvas.Color = _color
-
 		canvas.DrawImage(_images[_frame],
 			             RenderX, RenderY,
 			             DegreesToRadians(_rotation),
 			             _scale.X, _scale.Y )
 	End Method
-
-
-	Method UpdateCollisionRect:Void()
-
-	End Method
-
 
 	Private
 

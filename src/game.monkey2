@@ -199,13 +199,9 @@ Class Game2d Extends Window
 		EntityManager.GetInstance().Update()
 	End Method
 
-
 	Method DrawDebug:Void(canvas:Canvas)
 		canvas.Color = Color.Green
-
-'		Local ypos:Int = 0
-'		Local ysize:Int = 11
-		canvas.DrawText(""+ App.FPS, 0, 0)
+		canvas.DrawText(""+ App.FPS, 0, GAME.Height-10)
 	End Method
 
 	#Rem monkeydoc Draws text, centered horizontally by default.

@@ -9,7 +9,7 @@ Class Entity
 		_position = New Vec2f
 		_previousPosition = New Vec2f
 		_renderPosition = New Vec2f
-		_groupName = ""
+'		_groupName = ""
 		_radius = 1.0
 	End Method
 
@@ -43,17 +43,23 @@ Class Entity
 		Return _renderPosition.Y
 	End
 
-	Property RenderLayer:RenderLayer()
+	Property RenderLayer:EntityGroup()
 		Return _renderLayer
-	Setter( value:RenderLayer )
+	Setter( value:EntityGroup )
 		_renderLayer = value
 	End
 
-	Property GroupName:String()
-		Return _groupName
-	Setter( value:String )
-		_groupName = value
+	Property EntityGroup:EntityGroup()
+		Return _group
+	Setter( value:EntityGroup )
+		_group = value
 	End
+
+'	Property GroupName:String()
+'		Return _groupName
+'	Setter( value:String )
+'		_groupName = value
+'	End
 
 	Property Radius:Float()
 		Return _radius
@@ -104,8 +110,9 @@ Class Entity
 	Field _position:Vec2f
 	Field _previousPosition:Vec2f
 	Field _renderPosition:Vec2f
-	Field _renderLayer:RenderLayer
-	Field _groupName:String
+	Field _renderLayer:EntityGroup'RenderLayer
+'	Field _groupName:String
+	Field _group:EntityGroup
 
 	'collision radius
 	Field _radius:Float

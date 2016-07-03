@@ -4,7 +4,7 @@ A 2d game framework for Monkey2
 About
 -------------------------------------------------------------------------------
 
-Game2D is a 2d game engine for Monkey2, featuring states, entities, and much more.
+Game2D is a 2d game engine for [Monkey2](https://github.com/blitz-research/monkey2), featuring states, entities, and much more.
 Functionality will expand while games get written. It is not yet known what the full feature set of this engine will be but there are planned and considered features on the bottom of this page.
 
 Installation
@@ -14,7 +14,7 @@ Run __Monkey2/bin/mx2cc_linux makemods -clean -target=desktop game2d__
 
 The module compiles and you should be able to use it from now on by adding _#Import "< game2d >"_ to your main project file.
 
-An example game will be added shortly (Asteroids, of course!)
+An [Asteroids](https://github.com/mutatedmonkey/asteroids) clone make with Game2d is available!
 
 Current Features
 -------------------------------------------------------------------------------

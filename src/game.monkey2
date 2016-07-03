@@ -31,6 +31,9 @@ Class Game2d Extends Window
 		_timer = New FixedTime
 		_states = New IntMap<State>
 
+		_sounds = New StringMap<Sound>
+
+
 		_running = True
 		_paused = False
 		_vsync = 1
@@ -275,7 +278,44 @@ Class Game2d Extends Window
 	End Method
 
 
+	' *** audio ***
+
+	Method AddSound:Void( path:String, name:String)
+		Local sound:= Sound.Load(path)
+		_sounds.Add(name, sound)
+	End Method
+
+
+	#Rem monkeydoc Plays the sound with passed name.
+
+	@param name Name under which the sound is stored.
+
+	@param loops The amount of times the sound must be played.
+
+	@return The channel the sound is played on.
+
+	#End
+	Method PlaySound:Channel( name:String, loops:Int=0)
+		Local sound:= _sounds.Get(name)
+		DebugAssert( sound=true, "could not load sound" + name)
+		Local channel:= sound.Play(loops)
+		Return channel
+
+'		local channel:= New Channel
+'		channel.Play( sound, loops)
+'		Return channel
+
+	End Method
+
+'	Method GetSound:Sound(name:String)
+'		Return _sounds.Get(name)
+'	End Method
+
+
 	Private
+
+	'sounds findable by name
+	Field _sounds:StringMap<Sound>
 
 	Field _menu:Menu
 
@@ -301,3 +341,14 @@ Class Game2d Extends Window
 
 End Class
 
+
+
+Function PlaySound:Channel( name:String, loops:Int = 0 )
+	Local channel:= GAME.PlaySound(name, loops)
+	Return channel
+End Function
+
+
+'Function GetSound:Sound( name:String )
+'	Return GAME.GetSound( name )
+'End Function

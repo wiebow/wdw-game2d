@@ -77,7 +77,7 @@ Class EntityManager
 		If GAME.Debug
 			local color:= canvas.Color
 			canvas.Color = Color.Green
-			GAME.DrawText(canvas, "entities: " + _totals, 0, 10, False)
+			GAME.DrawText(canvas, "entities:" + _totals, 0, 10, False)
 			canvas.Color = color
 		Endif
 
@@ -164,9 +164,6 @@ Class EntityManager
 		Next
 	End Method
 
-
-
-
 	#Rem monkeydoc Adds render layer with passed index to the manager.
 
 	A renderlayer is an entity group.
@@ -191,9 +188,7 @@ Class EntityManager
 		Local layer:= GetRenderLayer(index)
 		If layer = Null Then Return
 
-'		layer.Clear()
-
-		'remove entities in the layer.
+		'remove layer reference in the entities.
 		For Local entity:= Eachin layer.Entities
 			entity.RenderLayer = Null
 		Next

@@ -28,6 +28,7 @@ Engine:
   * states and transitions
   * pre/post update/render calls
   * game options and config menu
+  * save/load of configuration (in progress)
 
 Input:
 
@@ -47,11 +48,11 @@ Game Entities:
 
 Sound:
 
-  * tbd, in progress
+  * easy playback by using name based storage
 
 Planned features:
 
-  * better sound control
+  * more sound control
   * gamepad support
   * text entities
   * interpolated values for use with sound, entities, color, etc. ( in progress )

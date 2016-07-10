@@ -19,7 +19,6 @@ Namespace game2d
 
 #Import "src/entity/entitymanager.monkey2"
 #Import "src/entity/entitygroup.monkey2"
-'#Import "src/entity/renderlayer.monkey2"
 #Import "src/entity/entity.monkey2"
 #Import "src/entity/imageentity.monkey2"
 

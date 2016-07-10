@@ -5,6 +5,9 @@ Namespace game2d
 'set when game class is created.
 Global GAME:Game2d
 
+
+#Rem monkeydoc Base class of a Game2d instance.
+#End
 Class Game2d Extends Window
 
 	Method New(title:String, w:Int, h:Int, flags:WindowFlags)
@@ -22,6 +25,7 @@ Class Game2d Extends Window
 		Init()
 	End Method
 
+	' internal
 	Method Init:Void()
 
 		' create managers and internal classes
@@ -30,7 +34,6 @@ Class Game2d Extends Window
 		_menu = New Menu
 		_timer = New FixedTime
 		_states = New IntMap<State>
-
 		_sounds = New StringMap<Sound>
 
 
@@ -40,6 +43,9 @@ Class Game2d Extends Window
 		_timer.Reset()
 	End Method
 
+
+	#Rem monkeydoc Pause flag.
+	#End
 	Property Paused:Bool()
 		Return _paused
 	Setter( value:Bool )
@@ -51,6 +57,9 @@ Class Game2d Extends Window
 		Endif
 	End
 
+	#Rem monkeydoc Render VSync flag.
+
+	#End
 	Property VSync:Bool()
 		Return _vsync
 	Setter( value:Bool )
@@ -63,6 +72,8 @@ Class Game2d Extends Window
 		_debug = value
 	End
 
+	#Rem monkeydoc Returns or sets the game graphics resolution.
+	#End
 	Property GameResolution:Vec2i()
 		Return _virtualres
 	Setter( value:Vec2i )
@@ -72,9 +83,11 @@ Class Game2d Extends Window
 	End
 
 
+	' internal
 	Method OnMeasure:Vec2i() Override
 		Return _virtualres
 	End Method
+
 
 	Property EnterTransition:Transition()
 		Return _enterTransition
@@ -148,6 +161,7 @@ Class Game2d Extends Window
 	End Method
 
 
+	' the actual rendering method.
 	Method GameRender:Void(canvas:Canvas, tween:Double)
 
 		canvas.TextureFilteringEnabled = False
@@ -172,6 +186,7 @@ Class Game2d Extends Window
 	End Method
 
 
+	' the actual update method.
 	Method GameUpdate:Void()
 
 		' update transition effect if it is active
@@ -202,6 +217,7 @@ Class Game2d Extends Window
 		EntityManager.GetInstance().Update()
 	End Method
 
+	' internal
 	Method DrawDebug:Void(canvas:Canvas)
 		canvas.Color = Color.Green
 		canvas.DrawText(""+ App.FPS, 0, GAME.Height-10)
@@ -234,7 +250,11 @@ Class Game2d Extends Window
 	Method Stop:Void()
 
 		'remove managers, etc.
-		'....
+
+		Controller.GetInstance().Destroy()
+		EntityManager.GetInstance().Destroy()
+
+		' to do
 
 		SaveConfig()
 		App.Terminate()
@@ -249,9 +269,10 @@ Class Game2d Extends Window
 		_config = JsonObject.Load( fileName )
 		If Not _config
 
-			Print( "no config loaded" )
+			' if file cannotbe found , a new config is created,
+			' and set with default values.
 
-			'cannnot load the config file, so create new config object
+			Print( "no config loaded" )
 
 			_config = New JsonObject
 
@@ -280,6 +301,14 @@ Class Game2d Extends Window
 
 	' *** audio ***
 
+
+	#Rem monkeydoc Loads a sound from passed path to the sound library.
+
+	@param path Path to load file from.
+
+	@param name Name to store the sound with.
+
+	#End
 	Method AddSound:Void( path:String, name:String)
 		Local sound:= Sound.Load(path)
 		_sounds.Add(name, sound)
@@ -300,21 +329,11 @@ Class Game2d Extends Window
 		DebugAssert( sound=true, "could not load sound" + name)
 		Local channel:= sound.Play(loops)
 		Return channel
-
-'		local channel:= New Channel
-'		channel.Play( sound, loops)
-'		Return channel
-
 	End Method
-
-'	Method GetSound:Sound(name:String)
-'		Return _sounds.Get(name)
-'	End Method
-
 
 	Private
 
-	'sounds findable by name
+	'sounds findable by name.
 	Field _sounds:StringMap<Sound>
 
 	Field _menu:Menu
@@ -331,24 +350,26 @@ Class Game2d Extends Window
 	Field _running:Bool
 	Field _vsync:Bool
 
-	' if true, additional info is drawn.
+	' if true, additional debug info is drawn.
+	' needs work.
 	Field _debug:Bool
 
 	' game resolution, not physical resolution.
 	Field _virtualres:Vec2i
 
 	Field _config:JsonObject
-
 End Class
 
 
 
+#Rem monkeydoc Plays sound that is stored under passed name.
+
+@param name Name under which the sound is stored.
+
+@param loops Number of additional repeats of the sound.
+
+#End
 Function PlaySound:Channel( name:String, loops:Int = 0 )
 	Local channel:= GAME.PlaySound(name, loops)
 	Return channel
 End Function
-
-
-'Function GetSound:Sound( name:String )
-'	Return GAME.GetSound( name )
-'End Function

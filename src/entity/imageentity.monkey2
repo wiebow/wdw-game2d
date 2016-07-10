@@ -6,6 +6,8 @@ Namespace game2d
 Class ImageEntity Extends Entity
 
 	#Rem monkeydoc Creates an entity with a single image frame.
+
+	@param image Image that this entity will display.
 	#End
 	Method New(image:Image)
 		_images = New Image[1]
@@ -14,42 +16,68 @@ Class ImageEntity Extends Entity
 	End Method
 
 	#Rem monkeydoc Creates an entity with an array of image frames.
+
+	@param images Array of images for this entity.
 	#End
 	Method New(images:Image[])
 		_images = images
 		Self.Initialize()
 	End Method
 
+	#Rem monkeydoc Returns or sets the entity collision flag.
+
+	When set to False, the entity does not participate in collision checks.
+
+	#End
 	Property Collision:Bool()
 		Return _collision
 	Setter( value:Bool )
 		_collision = value
 	End
 
+	#Rem monkeydoc Returns or sets the entity visibility flag.
+
+	When set to False, the entity is not rendered.
+
+	#End
 	Property Visible:Bool()
 		Return _visible
 	Setter( value:Bool )
 		_visible = value
 	End
 
+	#Rem monkeydoc Returns or sets the image frame to render.
+	#End
 	Property Frame:Int()
 		Return _frame
 	Setter( value:Int )
 		_frame = value
 	End
 
+	#Rem monkeydoc Returns or sets the entity image scale.
+
+	Note: Does not change the collision radius size.
+
+	#End
 	Property Scale:Vec2f()
 		Return _scale
 	Setter( value:Vec2f )
 		_scale = value
 	End
 
+	#Rem monkeydoc Returns or sets the entity color value.
+
+	Color class also includes Alpha.
+
+	#End
 	Property Color:Color()
 		Return _color
 	Setter( value:Color )
 		_color = value
 	End
 
+	#Rem monkeydoc Returns ot sets the entity rotation (in degrees)
+	#End
 	Property Rotation:Float()
 		Return _rotation
 	Setter( value:Float )
@@ -84,6 +112,7 @@ Class ImageEntity Extends Entity
 		_collision = True
 		_collisionRect = New Rectf
 
+		' set some sort of collision radius default.
 		Self.Radius = _images[0].Width/2
 	End Method
 

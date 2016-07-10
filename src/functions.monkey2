@@ -1,8 +1,7 @@
 
-Namespace game2d
-
 'various helper functions for game2d
 
+Namespace game2d
 
 #Rem monkeydoc Returns an array with the individual frames from the source image.
 
@@ -27,12 +26,17 @@ Function GrabAnimation:Image[]( source:Image, w:Int, h:Int, count:Int )
 	Return anim
 End Function
 
+#Rem monkeydoc Converts passed degrees to radians.
 
-'https://en.wikipedia.org/wiki/Radian
+https://en.wikipedia.org/wiki/Radian
+
+#End
 Function DegreesToRadians:Float( degrees:Float )
 	Return degrees*Pi/180
 End Function
 
+#Rem monkeydoc Converts passed radians to degrees.
+#End
 Function RadiansToDegrees:Float( radians:Float )
 	Return radians*180/Pi
 End Function

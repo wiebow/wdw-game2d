@@ -1,7 +1,7 @@
 
 Namespace game2d
 
-#Rem monkeydoc Interpolated value.
+#Rem monkeydoc Interpolated Float value.
 
 Can be used for various purposes, like scale, position, color, etc.
 
@@ -25,10 +25,22 @@ Class InterPolated
 		Self.Update()
 	End Method
 
+	#Rem monkeydoc Returns the current value.
+
+	@return Float
+
+	#End
 	Property Value:Float()
 		Return _value
 	End
 
+	#Rem monkeydoc Sets or returns the stepdirection for this value.
+
+	This can be -1 or 1.
+
+	@return Int
+
+	#End
 	Property StepDirection:Int()
 		Return _stepDirection
 	Setter( value:Int )
@@ -51,7 +63,6 @@ Class InterPolated
 	End Method
 
 	Private
-
 
 	Method SmoothStep:Float(x:Float)
 		Return x*x*(3-2*x)

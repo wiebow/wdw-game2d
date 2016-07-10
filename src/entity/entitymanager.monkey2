@@ -5,29 +5,41 @@ Namespace game2d
 #End
 Class EntityManager
 
+	#Rem monkeydoc Returns the instance of this manager.
+	#End
 	Function GetInstance:EntityManager()
 		If Not _instance Then Return New EntityManager
 		Return _instance
 	End Function
 
+	'do not use.
 	Method New()
 		DebugAssert( _instance = False, "Unable to create another instance of singleton class: Controller")
 		_instance = Self
 		Self.Initialize()
 	End Method
 
+	#Rem monkeydoc Destroys this manager.
+	#End
 	Method Destroy()
 		Self.ClearAll()
 		Self._instance = Null
 	End Method
 
+	'internal.
 	Method Initialize()
 		_renderLayers = New IntMap<EntityGroup>
 		_entityGroups = New StringMap<EntityGroup>
 		_locked = False
 	End Method
 
+	#Rem monkeydoc Updates this manager.
 
+	Entity positions are updated and any logic code is run.
+
+	During the update no entities can be added or removed from the manager, this is done after the update.
+
+	#End
 	Method Update:Void()
 
 		_totals = 0
@@ -59,6 +71,8 @@ Class EntityManager
 
 	Entities are drawn by render layer. Layer 0 is rendered first, etc.
 
+	Adding or removing entities during the render pass will result in runtime errors. Never add these kind of commands in entity render code.
+
 	@param tween Render tween value.
 
 	#End
@@ -83,7 +97,6 @@ Class EntityManager
 
 	End Method
 
-
 	#Rem monkeydoc Adds entity group with passed name to the manager.
 
 	@param groupName The name of the entity group to add.
@@ -103,7 +116,7 @@ Class EntityManager
 
 	@param groupName The name of the group to retrieve.
 
-	@return List containing entities, or Null if the group does not exist.
+	@return EntityGroup containing entities, or Null if the group does not exist.
 
 	#End
 	Method GetEntityGroup:EntityGroup(groupName:String)
@@ -130,18 +143,29 @@ Class EntityManager
 		_entityGroups.Remove(groupName)
 	End Method
 
+
+	#Rem monkeydoc Adds entity to the passed group.
+
+	@param entity The entity to add.
+
+	@param groupName Name of the group the entity is added to.
+
+	#End
 	Method AddEntityToGroup:Void( entity:Entity, groupName:String )
 		Local group:= Self.GetEntityGroup(groupName)
 		If group = Null Then group = Self.AddEntityGroup(groupName)
 		group.AddEntity(entity, _locked)
 
-		'this is not problem to add even if locked
+		'this is not problem to add even if locked.
+		'could be done better though.
 		entity.EntityGroup = group
 	End Method
 
 	#Rem monkeydoc Removes passed entity from its entity group.
 
-	@param e The entity to remove from its group.
+	The entity is not removed from the manager, only from its group.
+
+	@param entity The entity to remove from its group.
 
 	#End
 	Method RemoveEntityFromGroup:Void( entity:Entity )
@@ -151,7 +175,7 @@ Class EntityManager
 		entity.EntityGroup = Null
 	End Method
 
-	#Rem monkeydoc Removes all entities from an entitygroup.
+	#Rem monkeydoc Removes all entities from an entity group.
 
 	@param groupName Name of the group to clear.
 
@@ -170,7 +194,7 @@ Class EntityManager
 
 	@param index The index of the layer to add.
 
-	@return The new layer, or the layer with the passed index.
+	@return The new layer, or the layer with the passed index if it is already present in the manager.
 
 	#End
 	Method AddRenderLayer:EntityGroup( index:Int )
@@ -180,10 +204,22 @@ Class EntityManager
 		Return layer
 	End Method
 
+	#Rem monkeydoc Returns the render layer with passed index.
+
+	@param index Number used to store the layer.
+
+	#End
 	Method GetRenderLayer:EntityGroup(index:Int)
 		Return _renderLayers.Get(index)
 	End Method
 
+	#Rem monkeydoc Removes the render layer from the manager.
+
+	Entities in the layer are also removed.
+
+	@param index Number used to store the layer.
+
+	#End
 	Method RemoveRenderLayer:Void( index:Int )
 		Local layer:= GetRenderLayer(index)
 		If layer = Null Then Return
@@ -197,39 +233,51 @@ Class EntityManager
 		_renderLayers.Remove(index)
 	End Method
 
-	Method AddEntityToRenderLayer:Void(e:Entity, layerIndex:Int)
+
+	#Rem monkeydoc Adds entity to the renderlayer with passed index.
+
+	The render layer is created if it is not present in the manager.
+
+	@param entity The entity to add to the render layer.
+
+	@param layerIndex The index of the render layer.
+
+	#End
+	Method AddEntityToRenderLayer:Void(entity:Entity, layerIndex:Int)
 
 		' check if render layer exists. Create it if not.
 		Local layer:= Self.GetRenderLayer(layerIndex)
 		If Not layer Then layer = Self.AddRenderLayer(layerIndex)
 
 		' add entity to layer, pass locked flag
-		layer.AddEntity(e, _locked)
+		layer.AddEntity(entity, _locked)
 
-		e.RenderLayer = layer
+		entity.RenderLayer = layer
 	End Method
 
 
 	#Rem monkeydoc Removes passed entity from its render layer.
 
-	@param e The entity to remove from its render layer.
+	The entity will remain in the manager.
+
+	@param entity The entity to remove from its render layer.
 
 	#End
-	Method RemoveEntityFromRenderLayer:Void(e:Entity)
-		Local layer:= e.RenderLayer
+	Method RemoveEntityFromRenderLayer:Void(entity:Entity)
+		Local layer:= entity.RenderLayer
 		If layer = Null Then Return
-		layer.RemoveEntity(e, _locked)
-		e.RenderLayer = Null
+		layer.RemoveEntity(entity, _locked)
+		entity.RenderLayer = Null
 	End Method
 
 	#Rem monkeydoc Removes passed entity from manager.
 
-	@param e Entity to remove.
+	@param entity Entity to remove.
 
 	#End
-	Method RemoveEntity:Void(e:Entity)
-		Self.RemoveEntityFromRenderLayer(e)
-		Self.RemoveEntityFromGroup(e)
+	Method RemoveEntity:Void(entity:Entity)
+		Self.RemoveEntityFromRenderLayer(entity)
+		Self.RemoveEntityFromGroup(entity)
 	End Method
 
 	#Rem monkeydoc Removes all entities from the manager.
@@ -287,18 +335,30 @@ Function RemoveEntity:Void( entity:Entity )
 	EntityManager.GetInstance().RemoveEntity(entity)
 End Function
 
+#Rem monkeydoc Adds entity to the passed group.
+
+@param entity The entity to add.
+
+@param groupName Name of the group the entity is added to.
+
+#End
 Function AddEntityToGroup:Void( entity:Entity, group:String )
 	EntityManager.GetInstance().AddEntityToGroup( entity, group )
 End Function
 
+#Rem monkeydoc Returns entity group with passed name.
+
+@param groupName The name of the group to retrieve.
+
+@return EntityGroup containing entities, or Null if the group does not exist.
+
+#End
 Function GetEntityGroup:EntityGroup( group:String )
 	Return EntityManager.GetInstance().GetEntityGroup(group)
 End Function
 
-'Function RemoveEntityFromGroup:Void( entity:Entity, group:String )
-'	EntityManager.GetInstance().AddEntityToGroup( entity, group )
-'End Function
-
+#Rem monkeydoc Removes all entities from the manager.
+#End
 Function RemoveAllEntities:Void()
 	EntityManager.GetInstance().RemoveAllEntities()
 End Function

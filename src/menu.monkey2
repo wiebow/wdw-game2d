@@ -5,10 +5,19 @@ Namespace game2d
 #End
 Class Menu
 
+
+	#Rem monkeydoc Sets the menu to the main menu.
+	#End
 	Method Reset:Void()
 		_mode = MODE_MAINMENU
 	End Method
 
+
+	#Rem monkeydoc Updates the menu system.
+
+	According to mode, the input keys are scanned.
+
+	#End
 	Method Update:Void()
 		If _mode = MODE_MAINMENU
 			Select True
@@ -70,6 +79,9 @@ Class Menu
 
 	End Method
 
+
+	#Rem monkeydoc Renders the menu.
+	#End
 	Method Render:Void(canvas:Canvas)
 		Local ypos:Int
 		Select _mode
@@ -106,16 +118,14 @@ Class Menu
 		GAME.DrawText(canvas, "[ESCAPE] Continue Game",0,ypos)
 	End Method
 
-
+	' to do.
 	Method DrawAudioMenu:Void( canvas:Canvas )
-
 		Local fontHeight:Int = GAME.Style.DefaultFont.Height
 		Local ypos:Int = DrawMenuBorder( canvas, 8)
 
 		canvas.Alpha = 1.0
 		canvas.Color = Color.Cyan
 		GAME.DrawText(canvas, "Audio",0,ypos)
-
 	End Method
 
 
@@ -203,7 +213,7 @@ Class Menu
 	'this is the label of the currently active control.
 	Field _activeControlLabel:String
 
-
+	'various menu modes
 	Const MODE_MAINMENU:Int = 0
 	Const MODE_AUDIO:Int = 1
 	Const MODE_CONTROLS:Int = 2

@@ -11,11 +11,19 @@ Class EntityGroup
 		_toRemove = New List<Entity>
 	End Method
 
+	#Rem monkeydoc Removes all entities from this group.
+	#End
 	Method Clear:Void()
 		_entities.Clear()
 	End Method
 
+	#Rem monkeydoc Adds passed entity to this group.
 
+	@param entity Entity to add to the group.
+
+	@param locked If true, entity is added when the entity manager is no longer locked.
+
+	#End
 	Method AddEntity( entity:Entity, locked:Bool = False)
 		If locked
 			_toAdd.Add(entity)
@@ -29,6 +37,13 @@ Class EntityGroup
 		_entities.Add(entity)
 	End Method
 
+	#Rem monkeydoc Removes passed entity to this group.
+
+	@param entity Entity to remove from the group.
+
+	@param locked If true, entity is removed when the entity manager is no longer locked.
+
+	#End
 	Method RemoveEntity:Void( entity:Entity, locked:Bool = False )
 		If locked
 			_toRemove.Add(entity)
@@ -37,7 +52,9 @@ Class EntityGroup
 		_entities.Remove(entity)
 	End Method
 
-	'entityects added or removed during locked state are processed here.
+	' entityects added or removed during locked state are processed here.
+	' called by the entity manager when it is no longer locked.
+	' do not call by yourself.
 	Method ProcessQueues:Void()
 		For Local entity:= Eachin _toAdd
 			Self.AddEntity(entity)
@@ -50,7 +67,11 @@ Class EntityGroup
 		_toRemove.Clear()
 	End Method
 
-	' returns list of group content.
+	#Rem monkeydoc Returns the entities in this group.
+
+	@return List
+
+	#End
 	Property Entities:List<Entity>()
 		Return _entities
 	End

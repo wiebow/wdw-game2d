@@ -5,16 +5,20 @@ About
 -------------------------------------------------------------------------------
 
 Game2D is a 2d game engine for [Monkey2](https://github.com/blitz-research/monkey2), featuring states, entities, and much more.
-Functionality will expand while games get written. It is not yet known what the full feature set of this engine will be but there are planned and considered features on the bottom of this page.
+
+It is in development, but is already capable of creating fun games!
+
+Functionality will expand while games get written. Planned features can be found as issues on the game2d github page.
 
 Installation
 -------------------------------------------------------------------------------
 Copy the repository content into a folder called 'game2d' in the Monkey2/modules/ folder.
-Run __Monkey2/bin/mx2cc_linux makemods -clean -target=desktop game2d__
 
-The module compiles and you should be able to use it from now on by adding _#Import "< game2d >"_ to your main project file.
+Run __Monkey2/bin/mx2cc_linux makemods -clean -target=desktop game2d__ to build the module.
 
-An [Asteroids](https://github.com/mutatedmonkey/asteroids) clone make with Game2d is available!
+You should be able to use it from now on by adding _#Import "< game2d >"_ to your main project file.
+
+An Asteroids clone make with Game2d is available as an example in the module folder, I advice you to compile that first.
 
 Current Features
 -------------------------------------------------------------------------------
@@ -50,13 +54,6 @@ Sound:
 
   * easy playback by using name based storage
 
-Planned features:
-
-  * more sound control
-  * gamepad support
-  * text entities
-  * interpolated values for use with sound, entities, color, etc. ( in progress )
-
 License
 -------------------------------------------------------------------------------
 
@@ -81,5 +78,3 @@ Game2D is licensed under the MIT license:
     LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
     THE SOFTWARE.
-
-

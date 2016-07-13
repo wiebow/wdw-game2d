@@ -36,7 +36,6 @@ Class Game2d Extends Window
 		_states = New IntMap<State>
 		_sounds = New StringMap<Sound>
 
-
 		_running = True
 		_paused = False
 		_vsync = 1

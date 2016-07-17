@@ -21,7 +21,7 @@ Class Particle Extends ImageEntity
 		If Y < -16 Then ResetPosition( X, GAME.Height+16 )
 		If Y > GAME.Height+16 Then ResetPosition( X, -16 )
 
-		Color = New Color( Rnd(0.5,1.0), Rnd(0.3,1.0), Rnd(0.3,1.0), _alpha )
+		Color = New Color( 1.0, Rnd(0.5,1.0), Rnd(0.0,0.3), _alpha )
 
 		_alpha -= _alphaChange
 		If _alpha <= 0.0 Then RemoveEntity(Self)

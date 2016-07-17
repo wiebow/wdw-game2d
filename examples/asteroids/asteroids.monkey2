@@ -72,6 +72,11 @@ Class Asteroids Extends Game2d
 		AddKeyControl("FIRE", Key.A)
 		AddKeyControl("TELEPORT", Key.Down)
 
+		AddJoyAxisControl( "TURN", 0 )
+		AddJoyButtonControl( "FIRE", 1 )
+		AddJoyButtonControl( "THRUST", 2 )
+		AddJoyButtonControl( "TELEPORT", 3 )
+
 		'set global image
 		images = GrabAnimation(Image.Load("asset::rocks.png"),16,16,6)
 

@@ -73,17 +73,23 @@ Class Player Extends ImageEntity
 
 		If KeyControlDown("TURN LEFT") Then Rotation+=3
 		If KeyControlDown("TURN RIGHT") Then Rotation-=3
+
+		' analogue rotation. more is faster turn
+		' a little deadzone of 0.1
+		local value:Float = JoyAxisValue("TURN")
+		If value < -0.1 then Rotation+= 4*Abs(value)
+		If value > 0.1 then Rotation-=4*value
+
 		If Rotation < 0 Then Rotation+= 360
 		If Rotation > 360 Then Rotation-= 360
 
-		'https://en.wikipedia.org/wiki/Radian
-		If KeyControlDown("THRUST")
+		If KeyControlDown("THRUST") or JoyButtonDown("THRUST")
 			Local radian:= DegreesToRadians(Rotation)
 			acceleration.X =  Cos(radian) * THRUST
 			acceleration.Y = -Sin(radian) * THRUST
 		Endif
 
-		If KeyControlHit("FIRE")
+		If KeyControlHit("FIRE") or JoyButtonHit("FIRE")
 			Local b:= New Bullet(Rotation, New Vec2f(X,Y))
 			b.state = state
 			AddEntity(b , LAYER_BULLETS)
@@ -91,7 +97,7 @@ Class Player Extends ImageEntity
 			GAME.PlaySound("bullet")
 		Endif
 
-		If KeyControlHit("TELEPORT") and warps > 0
+		If KeyControlHit("TELEPORT") or JoyButtonHit("TELEPORT") and warps > 0
 			warps-=1
 			ResetPosition( Rnd(5, GAME.Width-5), Rnd(5, GAME.Height-5))
 			velocity = New Vec2f

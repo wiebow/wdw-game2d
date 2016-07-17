@@ -84,6 +84,13 @@ Class ImageEntity Extends Entity
 		_rotation = value
 	End
 
+	Property BlendMode:BlendMode()
+		Return _blend
+	Setter( value:BlendMode )
+		_blend = value
+	End
+
+
 	Method Render:Void( canvas:Canvas) Override
 		If Not _visible Then Return
 		If Not _images Then Return

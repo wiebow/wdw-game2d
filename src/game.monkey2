@@ -30,6 +30,7 @@ Class Game2d Extends Window
 
 		' create managers and internal classes
 		Controller.GetInstance()
+		Controller.GetInstance().ScanForJoystick()
 
 		_menu = New Menu
 		_timer = New FixedTime
@@ -148,7 +149,10 @@ Class Game2d Extends Window
 			While _timer.TimeStepNeeded()
 				Self.GameUpdate()
 			Wend
-			If Keyboard.KeyHit( Key.Escape ) Then Self.Paused = True
+			If Keyboard.KeyHit( Key.Escape )
+				Self.Paused = True
+				Controller.GetInstance().ScanForJoystick()
+			Endif
 		Endif
 
 		' screenshot key here

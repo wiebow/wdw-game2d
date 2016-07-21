@@ -15,7 +15,9 @@ Namespace game2d
 #Import "src/state/transition/transitionfadein.monkey2"
 #Import "src/state/transition/transitionfadeout.monkey2"
 
-#Import "src/input/controller.monkey2"
+#Import "src/input/inputmanager.monkey2"
+#Import "src/input/control.monkey2"
+#Import "src/input/joystickmappings.monkey2"
 
 #Import "src/entity/entitymanager.monkey2"
 #Import "src/entity/entitygroup.monkey2"

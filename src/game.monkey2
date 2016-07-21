@@ -29,8 +29,8 @@ Class Game2d Extends Window
 	Method Init:Void()
 
 		' create managers and internal classes
-		Controller.GetInstance()
-		Controller.GetInstance().ScanForJoystick()
+		InputManager.GetInstance()
+		InputManager.GetInstance().DetectJoystick()
 
 		_menu = New Menu
 		_timer = New FixedTime
@@ -151,7 +151,7 @@ Class Game2d Extends Window
 			Wend
 			If Keyboard.KeyHit( Key.Escape )
 				Self.Paused = True
-				Controller.GetInstance().ScanForJoystick()
+				InputManager.GetInstance().DetectJoystick()
 			Endif
 		Endif
 
@@ -217,6 +217,8 @@ Class Game2d Extends Window
 		Endif
 
 		_currentState.Update()
+
+
 		EntityManager.GetInstance().Update()
 	End Method
 
@@ -254,7 +256,7 @@ Class Game2d Extends Window
 
 		'remove managers, etc.
 
-		Controller.GetInstance().Destroy()
+		InputManager.GetInstance().Destroy()
 		EntityManager.GetInstance().Destroy()
 
 		' to do

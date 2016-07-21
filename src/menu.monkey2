@@ -20,7 +20,7 @@ Class Menu
 	#End
 	Method Update:Void()
 
-		Local controller:Controller = Controller.GetInstance()
+		Local input:= InputManager.GetInstance()
 
 		If _mode = MODE_MAINMENU
 			Select True
@@ -35,7 +35,7 @@ Class Menu
 
 				Case Keyboard.KeyHit( Key.F12 )
 					_mode = MODE_CONTROLS
-					Controller.GetInstance().ScanForJoystick()
+					input.DetectJoystick()
 
 				Case Keyboard.KeyHit( Key.Q )
 					GAME.RequestStop()
@@ -46,9 +46,9 @@ Class Menu
 			End Select
 
 		Elseif _mode = MODE_CONTROLS
-			If controller.Configuring
+			If input.Programming
 
-				' update timer that flashes the active control when configuring
+				' update timer that flashes the active control when Programming
 				_activeItemTimerCount-=1
 				If _activeItemTimerCount<0
 					_activeItemTimerCount = _activeItemTimerDelay
@@ -56,32 +56,32 @@ Class Menu
 				Endif
 
 				If Keyboard.KeyHit( Key.Escape )
-					controller.Configuring = False
+					input.Programming = False
 				Else
-					Local result:Bool = controller.Update()
-					If result
-						'restart line flash timer, start on
+					if input.Update() = true
 						_activeItemTimerCount = _activeItemTimerDelay
 						_activeHighlight = True
-					Endif
+					endif
 				Endif
 
 			Else
+				'not programming
+
 				Select True
 					Case Keyboard.KeyHit( Key.Escape )
 						_mode = MODE_MAINMENU
 
 					Case Keyboard.KeyHit( Key.D )
-						controller.ActiveDevice = Not controller.ActiveDevice
+						input.ActiveDevice = Not input.ActiveDevice
 
 					Case Keyboard.KeyHit( Key.F12)
-						controller.Configuring = True
+						input.Programming = True
+						input.Update()
 
 						'restart line flash timer, start on
 						_activeItemTimerCount = _activeItemTimerDelay
 						_activeHighlight = True
 				End Select
-
 			Endif
 
 		Elseif _mode = MODE_AUDIO
@@ -147,7 +147,7 @@ Class Menu
 	End Method
 
 	Method DrawControlsMenu:Void(canvas:Canvas)
-		Select Controller.GetInstance().ActiveDevice
+		Select InputManager.GetInstance().ActiveDevice
 			Case DEVICE_KEYBOARD	DrawKeyboardControls(canvas)
 			Case DEVICE_JOYSTICK	DrawJoystickControls(canvas)
 		End Select
@@ -158,18 +158,17 @@ Class Menu
 	#End
 	Method DrawKeyboardControls:Void(canvas:Canvas)
 
-		Local controller:Controller = Controller.GetInstance()
-		Local configuring:Bool = controller.Configuring
+		Local input:= InputManager.GetInstance()
 		Local fontHeight:Int = GAME.Style.DefaultFont.Height
 
   		' determine amount of lines needed
-		Local lines:Int = controller.KeyControls.Count() + 4
+		Local lines:Int = input.KeyboardControls.Count() + 4
 
 		' and draw the menu border
 		Local ypos:Int = DrawMenuBorder( canvas, lines)
 
 		canvas.Color = Color.Cyan
-		If configuring
+		If input.Programming
 			GAME.DrawText(canvas, "Configure Key Controls", 0, ypos)
 		Else
 			GAME.DrawText(canvas, "Key Controls", 0, ypos)
@@ -178,31 +177,24 @@ Class Menu
 		' now draw the key controls list
 
 		ypos+=fontHeight+4
-		Local index:Int = 0
-		For Local item:=EachIn controller.KeyControls
-		   	Local label:= item.Key
-		   	Local actualkey:= Keyboard.KeyName(item.Value)
-		   	local text:String = label + ": " + actualkey
-
+		For Local control:=EachIn input.KeyboardControls.Values
 		   	canvas.Color = Color.White
 
-			' select the correct color when configuring
-
-		   	If configuring and controller.CurrentControlName = label
+			' select the correct color when programming this control
+		   	If input.Programming and control.Programmed
 		   		If _activeHighlight Then canvas.Color = Color.Red
 			Endif
 
-			GAME.DrawText(canvas, text, 0, ypos)
+			GAME.DrawText(canvas, control.ToString(), 0, ypos)
 			ypos+=fontHeight
-			index+=1
 		Next
 
 		' draw footer or reconfigure message
 
 		ypos+=4
 		canvas.Color = Color.Green
-		If configuring
-			GAME.DrawText(canvas, "Select new key for '" + controller.CurrentControlName + "'", 0, ypos)
+		If input.Programming
+			GAME.DrawText(canvas, "Select new key for '" + input.ProgrammedControl.Label + "'", 0, ypos)
 			ypos+=fontHeight
 			GAME.DrawText(canvas, "[ESCAPE] Cancel Configuration", 0, ypos)
 		Else
@@ -217,24 +209,22 @@ Class Menu
 	#Rem monkeydoc @hidden
 	#End
 	Method DrawJoystickControls( canvas:Canvas )
-		Local controller:Controller = Controller.GetInstance()
-		Local configuring:Bool = controller.Configuring
+		Local input:InputManager = InputManager.GetInstance()
 		Local fontHeight:Int = GAME.Style.DefaultFont.Height
 
-		' draw the joystick controls
 		' determine amount of lines needed
 		' adjust when no stick is detetced
 
-		Local lines:Int = controller.JoyButtonControls.Count()
-		lines += controller.JoyAxisControls.Count() + 5
-		If controller.JoystickDevice = Null then lines = 5
+		Local lines:Int = input.JoystickControls.Count()+5
+'		lines += input.JoystickButtonControls.Count() + 5
+		If input.JoystickDevice = Null then lines = 5
 
 		Local ypos:Int = DrawMenuBorder( canvas, lines)
 
 		' draw menu title
 
 		canvas.Color = Color.Cyan
-		If configuring
+		If input.Programming
 			GAME.DrawText(canvas, "Configure Joystick Controls", 0, ypos)
 		Else
 			GAME.DrawText(canvas, "Joystick Controls", 0, ypos)
@@ -242,13 +232,15 @@ Class Menu
 
 		' and quit when no stick is detected
 
-		If controller.JoystickDevice = Null
+		If input.JoystickDevice = Null
+			ypos+=fontHeight+4
 			canvas.Color = Color.White
 			GAME.DrawText(canvas, "No Joystick detected!",0, ypos)
-			ypos+=fontHeight*2
+			ypos+=fontHeight+4
 			canvas.Color = Color.Green
+			GAME.DrawText(canvas, "[D] Change Device to Keyboard",0,ypos)
+			ypos+=fontHeight
 			GAME.DrawText(canvas, "[ESCAPE] Back", 0, ypos)
-
 			Return
 		Endif
 
@@ -257,30 +249,21 @@ Class Menu
 		' as part of the menu title
 
 		ypos+=fontHeight
-		GAME.DrawText(canvas, controller.JoyStickLabel,0,ypos )
+		GAME.DrawText(canvas, input.JoyStickLabel,0,ypos )
 
 		'then the axes
 
 		ypos+=fontHeight+4
-		For Local item:=EachIn controller.JoyAxisControls
-			canvas.Color = Color.White
-		   	If configuring and controller.CurrentControlName = item.Key and controller.ActiveControlType = TYPE_AXIS
-		   		If _activeHighlight Then canvas.Color = Color.Red
-			Endif
 
-			GAME.DrawText(canvas, controller.JoyAxisControlToString(item.Key), 0, ypos)
-			ypos+=fontHeight
-		Next
-
-		'then the buttons
-
-		For Local item:=EachIn controller.JoyButtonControls
+		For Local control:=EachIn input.JoystickControls.Values
 		   	canvas.Color = Color.White
-		   	If configuring and controller.CurrentControlName = item.Key and controller.ActiveControlType = TYPE_BUTTON
+
+			' select the correct color when programming this control
+		   	If input.Programming and control.Programmed
 		   		If _activeHighlight Then canvas.Color = Color.Red
 			Endif
 
-			GAME.DrawText(canvas, controller.JoyButtonControlToString(item.Key), 0, ypos)
+			GAME.DrawText(canvas, control.ToString(), 0, ypos)
 			ypos+=fontHeight
 		Next
 
@@ -289,14 +272,8 @@ Class Menu
 		ypos+=4
 		canvas.Color = Color.Green
 
-		If configuring
-			Select controller.ActiveControlType
-				Case TYPE_AXIS
-					GAME.DrawText(canvas, "Select new axis for '" + controller.CurrentControlName + "'", 0, ypos)
-				Case TYPE_BUTTON
-					GAME.DrawText(canvas, "Select new button for '" + controller.CurrentControlName + "'", 0, ypos)
-				Case TYPE_HAT
-			End Select
+		If input.Programming
+			GAME.DrawText(canvas, "Select new input for '" + input.ProgrammedControl.Label + "'", 0, ypos)
 
 			ypos+=fontHeight
 			GAME.DrawText(canvas, "[ESCAPE] Cancel Configuration", 0, ypos)
@@ -305,7 +282,6 @@ Class Menu
 			ypos+=fontHeight
 			GAME.DrawText(canvas, "[ESCAPE] Back  [F12] Configure", 0, ypos)
 		Endif
-
 	End Method
 
 
@@ -326,7 +302,6 @@ Class Menu
 
 		Return ypos+1
 	End Method
-
 
 	Private
 

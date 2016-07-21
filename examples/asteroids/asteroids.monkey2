@@ -66,16 +66,16 @@ Class Asteroids Extends Game2d
 
 		SeedRnd( Millisecs())
 
-		AddKeyControl("TURN LEFT", Key.Left)
-		AddKeyControl("TURN RIGHT", Key.Right)
-		AddKeyControl("THRUST", Key.Up)
-		AddKeyControl("FIRE", Key.A)
-		AddKeyControl("TELEPORT", Key.Down)
+		AddKeyboardControl("TURN LEFT", Key.Left)
+		AddKeyboardControl("TURN RIGHT", Key.Right)
+		AddKeyboardControl("THRUST", Key.Up)
+		AddKeyboardControl("FIRE", Key.A)
+		AddKeyboardControl("TELEPORT", Key.Down)
 
-		AddJoyAxisControl( "TURN", 0 )
-		AddJoyButtonControl( "FIRE", 1 )
-		AddJoyButtonControl( "THRUST", 2 )
-		AddJoyButtonControl( "TELEPORT", 3 )
+		AddJoystickAxisControl( "TURN", 0 )
+		AddJoystickButtonControl( "FIRE", 1 )
+		AddJoystickButtonControl( "THRUST", 2 )
+		AddJoystickButtonControl( "TELEPORT", 3 )
 
 		'set global image
 		images = GrabAnimation(Image.Load("asset::rocks.png"),16,16,6)

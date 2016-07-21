@@ -71,25 +71,32 @@ Class Player Extends ImageEntity
 		If Y < -5 Then ResetPosition( X, GAME.Height+5 )
 		If Y > GAME.Height+5 Then ResetPosition( X, -5 )
 
-		If KeyControlDown("TURN LEFT") Then Rotation+=3
-		If KeyControlDown("TURN RIGHT") Then Rotation-=3
+		If KeyboardControlDown("TURN LEFT") Then Rotation+=3
+		If KeyboardControlDown("TURN RIGHT") Then Rotation-=3
 
 		' analogue rotation. more is faster turn
 		' a little deadzone of 0.1
-		local value:Float = JoyAxisValue("TURN")
+		local value:Float = JoystickAxisValue("TURN")
 		If value < -0.1 then Rotation+= 4*Abs(value)
 		If value > 0.1 then Rotation-=4*value
+
+		' check joy hat
+		' if there is no hat, the value of 0 is returned
+		' so it can be called without problem
+		Local hatValue:JoystickHat = JoystickHatValue(0)
+		If hatValue = JoystickHat.Left Then Rotation+=3
+		If hatValue = JoystickHat.Right Then Rotation-=3
 
 		If Rotation < 0 Then Rotation+= 360
 		If Rotation > 360 Then Rotation-= 360
 
-		If KeyControlDown("THRUST") or JoyButtonDown("THRUST")
+		If KeyboardControlDown("THRUST") Or JoystickButtonDown("THRUST")
 			Local radian:= DegreesToRadians(Rotation)
 			acceleration.X =  Cos(radian) * THRUST
 			acceleration.Y = -Sin(radian) * THRUST
 		Endif
 
-		If KeyControlHit("FIRE") or JoyButtonHit("FIRE")
+		If KeyboardControlHit("FIRE") Or JoystickButtonHit("FIRE")
 			Local b:= New Bullet(Rotation, New Vec2f(X,Y))
 			b.state = state
 			AddEntity(b , LAYER_BULLETS)
@@ -97,7 +104,7 @@ Class Player Extends ImageEntity
 			GAME.PlaySound("bullet")
 		Endif
 
-		If KeyControlHit("TELEPORT") or JoyButtonHit("TELEPORT") and warps > 0
+		If KeyboardControlHit("TELEPORT") Or JoystickButtonHit("TELEPORT") and warps > 0
 			warps-=1
 			ResetPosition( Rnd(5, GAME.Width-5), Rnd(5, GAME.Height-5))
 			velocity = New Vec2f

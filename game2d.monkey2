@@ -7,8 +7,8 @@ Namespace game2d
 #Import "src/game.monkey2"
 #Import "src/fixedtime.monkey2"
 #Import "src/functions.monkey2"
-#Import "src/interpolated.monkey2"
 #Import "src/menu.monkey2"
+#Import "src/interpolated.monkey2"
 
 #Import "src/state/state.monkey2"
 #Import "src/state/transition/transition.monkey2"

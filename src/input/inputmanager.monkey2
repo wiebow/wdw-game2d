@@ -4,9 +4,6 @@ Namespace game2d
 Const DEVICE_KEYBOARD:Int = 0
 Const DEVICE_JOYSTICK:Int = 1
 
-Const TYPE_AXIS:Int = 0
-Const TYPE_BUTTON:Int = 1
-
 Const JOYSTICK_XBOX:String = "Microsoft X-Box 360 pad"
 Const JOYSTICK_PS3:String = "Sony PLAYSTATION(R)3 Controller"
 Const JOYSTICK_PS4:String = "Sony Computer Entertainment Wireless Controller"
@@ -77,11 +74,6 @@ Class InputManager
 		Return _programmedControl
 	End
 
-
-	Property KeyboardControls:StringMap<KeyboardControl>()
-		Return _keyboardControls
-	End
-
 	'retruns true if a control has been programmed
 	'menu uses this to reset the flashing line timer.
 	Method Update:Bool()
@@ -111,19 +103,19 @@ Class InputManager
 			Endif
 			If _previousProgramResult = True Then _programming = False
 		Endif
-
 		Return _previousProgramResult
 
 	End Method
 
-
-
 ' *** keyboard ***
 
-	Method AddKeyboardControl:Void( name:string, key:Key)
+	Property KeyboardControls:StringMap<KeyboardControl>()
+		Return _keyboardControls
+	End
+
+	Method AddKeyboardControl:Void( name:string, key:Int)'Key)
 		_keyboardControls.Set(name, New KeyboardControl(name, key) )
 	End Method
-
 
 	#Rem monkeydoc Returns true if the control with passed name is hit since the last update.
 
@@ -219,6 +211,38 @@ Class InputManager
 		Return JoystickHat.Centered
 	End Method
 
+' *** configuration
+
+	Method ApplyConfiguration:Void(config:JsonObject)
+
+		If config.Contains( "keyboardinput" )
+			_keyboardControls.Clear()
+			For local key:=Eachin config["keyboardinput"].ToArray()
+
+				Local control:String[] = key.ToString().Split(":")
+				AddKeyboardControl(control[0], Cast<Int>(control[1]))
+			Next
+		Endif
+
+		If config.Contains( "joystickbuttons" )
+			_joystickControls.Clear()
+			For local key:=Eachin config["joystickbuttons"].ToArray()
+
+				Local control:String[] = key.ToString().Split(":")
+				AddJoystickButtonControl(control[0], Cast<Int>(control[1]))
+			Next
+		Endif
+
+		'TODO: the added 0.0 is for target value later on
+		' do not clear the map as then buttons will be gone :)
+		If config.Contains( "joystickaxes" )
+			For local key:=Eachin config["joystickaxes"].ToArray()
+
+				Local control:String[] = key.ToString().Split(":")
+				AddJoystickAxisControl(control[0], Cast<Int>(control[1]), 0.0)
+			Next
+		Endif
+	End Method
 
 	Private
 
@@ -241,12 +265,7 @@ Class InputManager
 End Class
 
 
-
-
-
-' -- helper functions ---------------------
-
-
+'--- helper functions ---------------------
 
 Function AddJoystickButtonControl:Void( name:String, buttonIndex:Int )
 	InputManager.GetInstance().AddJoystickButtonControl(name, buttonIndex)
@@ -272,9 +291,7 @@ Function JoystickHatValue:JoystickHat( hatIndex:Int )
 	Return InputManager.GetInstance().JoystickHatValue(hatIndex)
 End Function
 
-' ---
-
-Function AddKeyboardControl:Void( name:String, key:Key )
+Function AddKeyboardControl:Void( name:String, key:Int)
 	InputManager.GetInstance().AddKeyboardControl(name, key)
 End Function
 

@@ -77,6 +77,11 @@ Class Asteroids Extends Game2d
 		AddJoystickButtonControl( "THRUST", 2 )
 		AddJoystickButtonControl( "TELEPORT", 3 )
 
+		' apply loaded input settings to the input manager.
+		' this will override the controls defined above;
+		' they will be removed and the ones in the configuration will be added.
+		ApplyInputConfiguration()
+
 		'set global image
 		images = GrabAnimation(Image.Load("asset::rocks.png"),16,16,6)
 

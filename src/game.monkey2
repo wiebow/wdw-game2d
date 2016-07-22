@@ -15,22 +15,24 @@ Class Game2d Extends Window
 		Super.New(title, w, h, flags)
 		GAME = Self
 
-		' get configuration from disk
-		' create new one when not found
-		' pass width and height so window size is set correctly after creating config file
-		LoadConfig()
-
-		Fullscreen = _config["fullscreen"].ToBool()
-
 		Init()
+
 	End Method
 
 	' internal
 	Method Init:Void()
 
 		' create managers and internal classes
+
 		InputManager.GetInstance()
 		InputManager.GetInstance().DetectJoystick()
+		EntityManager.GetInstance()
+
+		' try to load the file config.json
+		Self.LoadConfiguration()
+
+		' use configuration to set the game instance preferences
+		Fullscreen = _configuration["fullscreen"].ToBool()
 
 		_menu = New Menu
 		_timer = New FixedTime
@@ -42,6 +44,41 @@ Class Game2d Extends Window
 		_vsync = 1
 		_timer.Reset()
 	End Method
+
+	#Rem monkeydoc Requests the game to stop in the next update.
+
+	#End
+	Method RequestStop:Void()
+		_running = False
+	End Method
+
+	#Rem monkeydoc @hidden
+
+	Stops and exits the game.
+
+	#End
+	Method Stop:Void()
+
+		SaveConfiguration()
+
+		'remove managers, etc.
+
+		InputManager.GetInstance().Destroy()
+		EntityManager.GetInstance().Destroy()
+
+		App.Terminate()
+	End Method
+
+
+	#Rem monkeydoc Apply loaded configuration to the game
+
+	This shouldbe called after game setup so any controls that have been reconfigured will be changed.
+
+	#End
+	Method ApplyInputConfiguration:Void()
+		InputManager.GetInstance().ApplyConfiguration(_configuration)
+	End Method
+
 
 
 	#Rem monkeydoc Pause flag.
@@ -244,67 +281,9 @@ Class Game2d Extends Window
 	Method OnRestartGame:Void() Virtual
 	End Method
 
-	#Rem monkeydoc Requests the game to stop in the next update.
-	#End
-	Method RequestStop:Void()
-		_running = False
-	End Method
-
-	#Rem monkeydoc Stops and exits the game.
-	#End
-	Method Stop:Void()
-
-		'remove managers, etc.
-
-		InputManager.GetInstance().Destroy()
-		EntityManager.GetInstance().Destroy()
-
-		' to do
-
-		SaveConfig()
-		App.Terminate()
-	End Method
-
-' configuration
-
-	Method LoadConfig:Void()
-		Local fileName:String = AppDir() + "config.json"
-		Print( fileName)
-
-		_config = JsonObject.Load( fileName )
-		If Not _config
-
-			' if file cannotbe found , a new config is created,
-			' and set with default values.
-
-			Print( "no config loaded" )
-
-			_config = New JsonObject
-
-			' screen items
-			_config["fullscreen"] = New JsonBool(False)
-
-			' controls
-''			_config["up"] = New JsonNumber(Key.A)
-
-''			_config["windowsize"]=New JsonArray( New JsonValue[](New JsonNumber(640), New JsonNumber(480)))
 
 
-		Endif
-	End Method
-
-
-	Method SaveConfig:Void()
-
-		'transfer settings from game to json object
-		_config["fullscreen"] = New JsonBool(Fullscreen)
-
-		Local s:String = AppDir() + "config.json"
-		SaveString( _config.ToJson(),s)
-	End Method
-
-
-	' *** audio ***
+' *** audio ***
 
 
 	#Rem monkeydoc Loads a sound from passed path to the sound library.
@@ -336,14 +315,85 @@ Class Game2d Extends Window
 		Return channel
 	End Method
 
+
+
+	Method LoadConfiguration:Void()
+
+		Local fileName:String = AppDir() + "config.json"
+		_configuration = JsonObject.Load( fileName )
+		If Not _configuration
+
+			Print( "config not loaded" )
+
+			'could not load the json file
+			'create a new one and set defaults for the game.
+
+			_configuration = New JsonObject
+			_configuration["fullscreen"]=New JsonBool( False )
+			_configuration["windowsize"]=New JsonArray( New JsonValue[]( New JsonNumber(640), New JsonNumber(480) ) )
+		Endif
+
+		Print( "config loaded" )
+	End Method
+
+
+
+	Method SaveConfiguration:Void()
+
+		_configuration = New JsonObject
+
+		' get settings from the various game systems
+
+	' --- game
+
+		_configuration["fullscreen"] = New JsonBool( GAME.Fullscreen )
+
+	' --- input
+
+		Local keys:= New JsonArray
+		For Local control:=Eachin InputManager.GetInstance().KeyboardControls.Values
+			keys.Add( New JsonString( control.Label + ":" + control.ToJson() ) )
+		Next
+		_configuration["keyboardinput"] = keys
+
+		local joybuttons:= New JsonArray
+		For Local control:=Eachin InputManager.GetInstance().JoystickControls.Values
+			If Cast<JoystickButtonControl>(control)
+				joybuttons.Add( New JsonString( control.Label + ":" + control.ToJson() ) )
+			Endif
+		Next
+		_configuration["joystickbuttons"] = joybuttons
+
+		local joyaxes:= New JsonArray
+		For Local control:=Eachin InputManager.GetInstance().JoystickControls.Values
+			If Cast<JoystickAxisControl>(control)
+				joyaxes.Add( New JsonString( control.Label + ":" + control.ToJson() ) )
+			Endif
+		Next
+		_configuration["joystickaxes"] = joyaxes
+
+		' process the json string  HACK
+
+		Local s:String = AppDir() + "config.json"
+		SaveString( _configuration.ToJson(), s )
+
+		Print( "config saved" )
+	End Method
+
+
+	Property Configuration:JsonObject()
+		Return _configuration
+	End
+
 	Private
 
 	'sounds findable by name.
 	Field _sounds:StringMap<Sound>
 
 	Field _menu:Menu
-
 	Field _timer:FixedTime
+
+	Field _configuration:JsonObject
 
 	Field _states:IntMap<State>
 	Field _currentState:State
@@ -362,7 +412,8 @@ Class Game2d Extends Window
 	' game resolution, not physical resolution.
 	Field _virtualres:Vec2i
 
-	Field _config:JsonObject
+
+'	Field _configuration:JsonObject
 End Class
 
 

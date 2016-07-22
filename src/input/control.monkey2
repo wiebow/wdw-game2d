@@ -14,6 +14,10 @@ Class Control Abstract
 		Return "blah"
 	End Method
 
+	Method ToJson:Int() Virtual
+		Return 0
+	End Method
+
 	Property Label:String()
 		Return _label
 	End
@@ -45,13 +49,17 @@ End Class
 #End
 Class KeyboardControl Extends Control
 
-	Method New( label:String, keycode:Key )
+	Method New( label:String, keycode:Int)'Key )
 		_label = label
-		_key = keycode
+		_key = Cast<Key>(keycode)
 	End Method
 
 	Method ToString:String() Override
 		Return "" + _label + ": " + Keyboard.KeyName(_key)
+	End Method
+
+	Method ToJson:Int() Override
+		Return _key
 	End Method
 
 	Method Down:Bool()
@@ -80,6 +88,12 @@ Class KeyboardControl Extends Control
 		Next
 		Return False
 	End Method
+
+
+	'used by Configuration
+	Property KeyCode:Key()
+		Return _key
+	End
 
 	Private
 
@@ -116,11 +130,11 @@ Class JoystickAxisControl Extends Control
 		Return _manager.JoystickMapping.AxisNeutral( _index )
 	End Method
 
+	Method ToJson:Int() Override
+		Return _index
+	End Method
 
 	Method Program:Bool() Override
-
-'		Local device:JoystickDevice = _manager.JoystickDevice
-'		Local mapping:JoystickMapping = _manager.JoystickMapping
 
 		' go through all the axes on the mapped joystick
 		For Local axisIndex:Int = 0 Until _manager.JoystickMapping.AxisAmount
@@ -177,14 +191,11 @@ Class JoystickButtonControl Extends Control
 		Return _joystickDevice.ButtonPressed( _index )
 	End Method
 
+	Method ToJson:Int() Override
+		Return _index
+	End Method
 
 	Method Program:Bool() Override
-
-'		Local device:JoystickDevice = _manager.JoystickDevice
-'		Local mapping:JoystickMapping = _manager.JoystickMapping
-
-
-		' go through all the buttons on the mapped device
 		For Local buttonIndex:Int = 0 Until _manager.JoystickMapping.ButtonAmount
 			If _joystickDevice.ButtonPressed(buttonIndex)
 				_index = buttonIndex
@@ -198,35 +209,9 @@ Class JoystickButtonControl Extends Control
 
  	Private
 
-
 	Field _joystickDevice:JoystickDevice
 	Field _manager:InputManager
 	Field _index:Int
 
 End Class
-
-
-#rem
-
-Class HatInput Extends Input
-
-
-	Method New( device:JoystickDevice, index:Int, direction:Int )
-		_joystickDevice = device
-		_index = index
-		_direction = direction
-	End Method
-
-
-	Method ToString:String() Override
-		Return "hat"
- 	End Method
-
- 	Private
-
- 	Field _direction:Int
-
-End Class
-
-#End
 

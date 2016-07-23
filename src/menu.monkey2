@@ -1,5 +1,5 @@
 
-Namespace game2d
+Namespace wdw.game2d
 
 #Rem monkeydoc Menu class for Game2d.
 #End
@@ -98,12 +98,19 @@ Class Menu
 	#Rem monkeydoc @hidden
 	#End
 	Method Render:Void(canvas:Canvas)
+
+		Local matrix:= canvas.Matrix
+		canvas.ClearMatrix()
+
 		Local ypos:Int
 		Select _mode
 			Case MODE_MAINMENU 	DrawMainMenu(canvas)
 			Case MODE_AUDIO		DrawAudioMenu(canvas)
 			Case MODE_CONTROLS 	DrawControlsMenu(canvas)
 		End Select
+
+		canvas.Matrix = matrix
+
 	End Method
 
 

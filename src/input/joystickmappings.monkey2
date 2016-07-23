@@ -1,5 +1,5 @@
 
-namespace game2d
+Namespace wdw.game2d
 
 #Rem monkeydoc Base class for joypad mapping definitions.
 #End

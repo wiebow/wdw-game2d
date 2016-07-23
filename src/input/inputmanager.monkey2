@@ -1,5 +1,5 @@
 
-Namespace game2d
+Namespace wdw.game2d
 
 Const DEVICE_KEYBOARD:Int = 0
 Const DEVICE_JOYSTICK:Int = 1
@@ -67,7 +67,15 @@ Class InputManager
 		_programming = value
 
 		' this forces the first control to be enabled for programming
-		If _programming Then _previousProgramResult = True
+		If _programming
+			_previousProgramResult = True
+		Else
+			'reset prgramming tag on current conrol
+
+			If _programmedControl
+				_programmedControl.Programmed = False
+			Endif
+		Endif
 	End
 
 	Property ProgrammedControl:Control()

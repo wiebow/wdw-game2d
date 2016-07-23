@@ -1,5 +1,6 @@
 
-'using mojo to make stuff.
+' example game using game2d as framework
+' asteroids! shoot the rocks and survive long enough to get a new highscore!
 
 #Import "<std>"
 #Import "<mojo>"
@@ -7,7 +8,7 @@
 
 Using std..
 Using mojo..
-Using game2d
+Using wdw.game2d
 
 #Import "titlestate.monkey2"
 #Import "playstate.monkey2"

@@ -1,5 +1,5 @@
 
-Namespace game2d
+Namespace wdw.game2d
 
 'used by managers etc to get to the game instance.
 'set when game class is created.
@@ -72,7 +72,7 @@ Class Game2d Extends Window
 
 	#Rem monkeydoc Apply loaded configuration to the game
 
-	This shouldbe called after game setup so any controls that have been reconfigured will be changed.
+	This should be called after game setup so any controls that have been reconfigured will be changed.
 
 	#End
 	Method ApplyInputConfiguration:Void()

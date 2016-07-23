@@ -1,5 +1,5 @@
 
-Namespace game2d
+Namespace wdw.game2d
 
 #Rem monkeydoc Entity that holds and renders an image.
 #End
@@ -96,7 +96,7 @@ Class ImageEntity Extends Entity
 		If Not _images Then Return
 
 		'debug
-'		canvas.DrawEllipse(X,Y, Radius, Radius)
+		canvas.DrawEllipse(X,Y, Radius, Radius)
 
 		canvas.BlendMode = _blend
 		canvas.Color = _color

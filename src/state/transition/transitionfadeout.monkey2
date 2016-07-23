@@ -1,5 +1,5 @@
 
-Namespace game2d
+Namespace wdw.game2d
 
 #Rem monkeydoc Effect that fades out the complete screen.
 #End

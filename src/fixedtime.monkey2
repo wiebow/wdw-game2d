@@ -1,5 +1,5 @@
 
-Namespace game2d
+Namespace wdw.game2d
 
 #Rem monkeydoc Provides fixed update times for Game2d.
 

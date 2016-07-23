@@ -32,12 +32,13 @@ Engine:
   * states and transitions
   * pre/post update/render calls
   * game options and config menu
-  * save/load of configuration (in progress)
+  * save/load of configuration
 
 Input:
 
   * key control device
-  * reconfigure config menu
+  * joystick control device
+  * reconfigable
 
 Graphics:
 

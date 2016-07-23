@@ -1,5 +1,5 @@
 
-Namespace game2d
+Namespace wdw.game2d
 
 #Import "<std>"
 #Import "<mojo>"
@@ -23,6 +23,7 @@ Namespace game2d
 #Import "src/entity/entitygroup.monkey2"
 #Import "src/entity/entity.monkey2"
 #Import "src/entity/imageentity.monkey2"
+#Import "src/entity/cameraentity.monkey2"
 
 Using std..
 Using mojo..

@@ -1,7 +1,7 @@
 
 'various helper functions for game2d
 
-Namespace game2d
+Namespace wdw.game2d
 
 #Rem monkeydoc Returns an array with the individual frames from the source image.
 

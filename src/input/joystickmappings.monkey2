@@ -59,16 +59,6 @@ Class JoystickMapping Abstract
 End Class
 
 
-#Rem monkeydoc Dummy stick to show when not recognized.
-#End
-Class UnknownStick Extends JoystickMapping
-
-	Method New()
-		_label = "Unknown Joystick"
-	End Method
-
-End Class
-
 #Rem monkeydoc Xbox 360 wired controller mappings from button and axis names to Monkey2 ids.
 #End
 Class Xbox360 Extends JoystickMapping

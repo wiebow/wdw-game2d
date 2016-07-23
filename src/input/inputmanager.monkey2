@@ -4,9 +4,14 @@ Namespace wdw.game2d
 Const DEVICE_KEYBOARD:Int = 0
 Const DEVICE_JOYSTICK:Int = 1
 
+
+' the 2nd names for each are the reported names on Windows.
 Const JOYSTICK_XBOX:String = "Microsoft X-Box 360 pad"
+Const JOYSTICK_XBOX2:String = "XInput Controller #1"
 Const JOYSTICK_PS3:String = "Sony PLAYSTATION(R)3 Controller"
+Const JOYSTICK_PS32:String = "PLAYSTATION(R)3 Controller"
 Const JOYSTICK_PS4:String = "Sony Computer Entertainment Wireless Controller"
+Const JOYSTICK_PS42:String = "Wireless Controller"
 
 
 #Rem monkeydoc Input controller.
@@ -159,14 +164,17 @@ Class InputManager
 		If Not _joystickDevice Return
 
 		Select _joystickDevice.Name
-			Case JOYSTICK_XBOX
+			Case JOYSTICK_XBOX, JOYSTICK_XBOX2
 				_joystickDeviceMapping = New Xbox360
-			Case JOYSTICK_PS3
+			Case JOYSTICK_PS3, JOYSTICK_PS32
 				_joystickDeviceMapping = New Ps3
-			Case JOYSTICK_PS4
+			Case JOYSTICK_PS4, JOYSTICK_PS42
 				_joystickDeviceMapping = New Ps4
 			Default
-				_joystickDeviceMapping = New UnknownStick
+
+				' don't know this stick!!
+
+				_joystickDeviceMapping = Null
 		End Select
 
 	End Method

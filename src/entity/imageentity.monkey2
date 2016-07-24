@@ -95,9 +95,6 @@ Class ImageEntity Extends Entity
 		If Not _visible Then Return
 		If Not _images Then Return
 
-		'debug
-		canvas.DrawEllipse(X,Y, Radius, Radius)
-
 		canvas.BlendMode = _blend
 		canvas.Color = _color
 		canvas.DrawImage(_images[_frame],

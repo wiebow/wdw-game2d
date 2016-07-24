@@ -1,6 +1,6 @@
 
-' example game using game2d as framework
-' asteroids! shoot the rocks and survive long enough to get a new highscore!
+' Example game using game2d as framework.
+' Asteroids! Shoot the rocks and survive long enough to get a new highscore!
 
 #Import "<std>"
 #Import "<mojo>"
@@ -63,6 +63,8 @@ Class Asteroids Extends Game2d
 		Style.BackgroundColor = New Color(0.05, 0.05, 0.15)
 		Style.DefaultFont  = Font.Load( "asset::arcade.ttf", 10 )
 
+		TextureFilterEnabled = False
+
 		Debug = False
 
 		SeedRnd( Millisecs())
@@ -78,9 +80,8 @@ Class Asteroids Extends Game2d
 		AddJoystickButtonControl( "THRUST", 2 )
 		AddJoystickButtonControl( "TELEPORT", 3 )
 
-		' apply loaded input settings to the input manager.
-		' this will override the controls defined above;
-		' they will be removed and the ones in the configuration will be added.
+		' Apply loaded input settings to the input manager.
+		' This will override the controls defined above; they will be removed and the ones in the configuration will be added.
 		ApplyInputConfiguration()
 
 		'set global image
@@ -95,6 +96,12 @@ Class Asteroids Extends Game2d
 		AddState( New TitleState, TITLE_STATE )
 		AddState( New PlayState, PLAY_STATE )
 		EnterTransition = New TransitionFadein
+	End Method
+
+
+	' Lets tell the game what needs to happen when restart is selected from menu.
+	Method OnRestartGame:Void() Override
+		EnterState(TITLE_STATE)
 	End Method
 
 End Class

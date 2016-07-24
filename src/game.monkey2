@@ -10,16 +10,16 @@ Global GAME:Game2d
 #End
 Class Game2d Extends Window
 
+	#Rem monkeydoc Creates a new game2d window, and initilaizes configuration and defaults
+	#End
 	Method New(title:String, w:Int, h:Int, flags:WindowFlags)
-
 		Super.New(title, w, h, flags)
 		GAME = Self
-
 		Init()
-
 	End Method
 
-	' internal
+	#Rem monkeydoc @hidden
+	#End
 	Method Init:Void()
 
 		' create managers and internal classes
@@ -39,6 +39,7 @@ Class Game2d Extends Window
 		_states = New IntMap<State>
 		_sounds = New StringMap<Sound>
 
+		_texturefilterenabled = False
 		_running = True
 		_paused = False
 		_vsync = 1
@@ -46,7 +47,6 @@ Class Game2d Extends Window
 	End Method
 
 	#Rem monkeydoc Requests the game to stop in the next update.
-
 	#End
 	Method RequestStop:Void()
 		_running = False
@@ -70,7 +70,7 @@ Class Game2d Extends Window
 	End Method
 
 
-	#Rem monkeydoc Apply loaded configuration to the game
+	#Rem monkeydoc Apply loaded configuration to the game.
 
 	This should be called after game setup so any controls that have been reconfigured will be changed.
 
@@ -95,7 +95,6 @@ Class Game2d Extends Window
 	End
 
 	#Rem monkeydoc Render VSync flag.
-
 	#End
 	Property VSync:Bool()
 		Return _vsync
@@ -103,11 +102,27 @@ Class Game2d Extends Window
 		_vsync = value
 	End
 
+
+	#Rem monkeydoc @hidden Debug flag.
+	#End
 	Property Debug:Bool()
 		Return _debug
 	Setter( value:Bool )
 		_debug = value
 	End
+
+
+	#Rem monkeydoc The texture enabled flag.
+
+	Setting this to false will remove filtering from all rendering.
+
+	#End
+	Property TextureFilterEnabled:Bool()
+		Return _texturefilterenabled
+	Setter( value:Bool )
+		_texturefilterenabled = value
+	End
+
 
 	#Rem monkeydoc Returns or sets the game graphics resolution.
 	#End
@@ -119,36 +134,43 @@ Class Game2d Extends Window
 		OnMeasure()
 	End
 
-
-	' internal
+	#Rem monkeydoc @hidden
+	#End
 	Method OnMeasure:Vec2i() Override
 		Return _virtualres
 	End Method
 
-
+	#Rem monkeydoc @hidden
+	#End
 	Property EnterTransition:Transition()
 		Return _enterTransition
 	Setter( value:Transition )
 		_enterTransition = value
 	End
 
-	#Rem monkeydoc Adds state to the game.
+	#Rem monkeydoc Adds a new state to the game.
 
-	First state added becomes the startup state.
+	First state added becomes the startup state, and enter() method of that state is called.
 
 	#End
 	Method AddState:Void(state:State, id:Int)
 		_states.Add(id, state)
 		state.Id = id
 		state.Game = Self
-		If _currentState = Null Then _currentState = state
+		If _currentState = Null
+			_currentState = state
+			_currentState.Enter()
+		Endif
 	End Method
 
-
 	#Rem monkeydoc Enters a state without a transition effect.
+
+	Enter() method is also called.
+
 	#End
 	Method EnterState:Void(id:Int)
 		_currentState = _states.Get(id)
+		_currentState.Enter()
 		DebugAssert( _currentState <> Null, "No state added!")
 	End Method
 
@@ -157,7 +179,7 @@ Class Game2d Extends Window
 	Assumes there is already a current state.
 
 	#End
-	Method EnterState:Void(id:Int, enter:Transition=Null, leave:Transition=Null)
+	Method EnterState:Void(id:Int, enter:Transition, leave:Transition)
 		_enterTransition = enter
 		_leaveTransition = leave
 
@@ -200,33 +222,8 @@ Class Game2d Extends Window
 		Self.GameRender( canvas, _timer.Tween )
 	End Method
 
-
-	' the actual rendering method.
-	Method GameRender:Void(canvas:Canvas, tween:Double)
-
-		canvas.TextureFilteringEnabled = False
-
-		_currentState.PreRender(canvas, tween)
-
-		EntityManager.GetInstance().Render( canvas, tween )
-
-		_currentState.Render(canvas, tween)
-
-		If _leaveTransition
-			_leaveTransition.Render(canvas)
-		ElseIf _enterTransition
-			_enterTransition.Render(canvas)
-		Endif
-
-		If Self.Paused Then _menu.Render(canvas)
-
-		_currentState.PostRender(canvas, tween)
-
-		If _debug Then DrawDebug(canvas)
-	End Method
-
-
-	' the actual update method.
+	#Rem monkeydoc @hidden The actual update method.
+	#End
 	Method GameUpdate:Void()
 
 		' update transition effect if it is active
@@ -255,11 +252,35 @@ Class Game2d Extends Window
 
 		_currentState.Update()
 
-
 		EntityManager.GetInstance().Update()
 	End Method
 
-	' internal
+	' the actual rendering method.
+	Method GameRender:Void(canvas:Canvas, tween:Double)
+
+		canvas.TextureFilteringEnabled = _texturefilterenabled
+
+		_currentState.PreRender(canvas, tween)
+
+		EntityManager.GetInstance().Render( canvas, tween )
+
+		_currentState.Render(canvas, tween)
+
+		If _leaveTransition
+			_leaveTransition.Render(canvas)
+		ElseIf _enterTransition
+			_enterTransition.Render(canvas)
+		Endif
+
+		If Self.Paused Then _menu.Render(canvas)
+
+		_currentState.PostRender(canvas, tween)
+
+		If _debug Then DrawDebug(canvas)
+	End Method
+
+	#Rem monkeydoc @hidden
+	#End
 	Method DrawDebug:Void(canvas:Canvas)
 		canvas.Color = Color.Green
 		canvas.DrawText(""+ App.FPS, 0, GAME.Height-10)
@@ -315,15 +336,12 @@ Class Game2d Extends Window
 		Return channel
 	End Method
 
-
-
+	#Rem monkeydoc @hidden
+	#End
 	Method LoadConfiguration:Void()
-
 		Local fileName:String = AppDir() + "config.json"
 		_configuration = JsonObject.Load( fileName )
 		If Not _configuration
-
-			Print( "config not loaded" )
 
 			'could not load the json file
 			'create a new one and set defaults for the game.
@@ -332,12 +350,10 @@ Class Game2d Extends Window
 			_configuration["fullscreen"]=New JsonBool( False )
 			_configuration["windowsize"]=New JsonArray( New JsonValue[]( New JsonNumber(640), New JsonNumber(480) ) )
 		Endif
-
-		Print( "config loaded" )
 	End Method
 
-
-
+	#Rem monkeydoc @hidden
+	#End
 	Method SaveConfiguration:Void()
 
 		_configuration = New JsonObject
@@ -380,7 +396,8 @@ Class Game2d Extends Window
 		Print( "config saved" )
 	End Method
 
-
+	#Rem monkeydoc Retrieves the configuration json object
+	#End
 	Property Configuration:JsonObject()
 		Return _configuration
 	End
@@ -393,6 +410,7 @@ Class Game2d Extends Window
 	Field _menu:Menu
 	Field _timer:FixedTime
 
+	'the loaded configuration
 	Field _configuration:JsonObject
 
 	Field _states:IntMap<State>
@@ -404,6 +422,7 @@ Class Game2d Extends Window
 	Field _paused:Bool
 	Field _running:Bool
 	Field _vsync:Bool
+	Field _texturefilterenabled:Bool
 
 	' if true, additional debug info is drawn.
 	' needs work.
@@ -412,8 +431,6 @@ Class Game2d Extends Window
 	' game resolution, not physical resolution.
 	Field _virtualres:Vec2i
 
-
-'	Field _configuration:JsonObject
 End Class
 
 

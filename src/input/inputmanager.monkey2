@@ -205,22 +205,26 @@ Class InputManager
 	End
 
 	Method JoystickButtonHit:Bool( name:String )
+		If _joystickDevice = Null Then Return False
 		Local control:JoystickButtonControl = Cast<JoystickButtonControl>(_joystickControls.Get(name) )
 		Return control.Hit()
 	End Method
 
 	Method JoystickButtonDown:Bool( name:String )
+		If _joystickDevice = Null Then Return False
 		Local control:JoystickButtonControl = Cast<JoystickButtonControl>(_joystickControls.Get(name) )
 		Return control.Down()
 	End Method
 
 	Method JoystickAxisValue:Float( name:String )
+		If _joystickDevice = Null Then Return 0.0
 		Local control:JoystickAxisControl = Cast<JoystickAxisControl>(_joystickControls.Get(name) )
 		Return control.Value()
 	End Method
 
 
 	Method JoystickHatValue:JoystickHat(hatIndex:Int)
+		If _joystickDevice = Null Then Return JoystickHat.Centered
 		If _joystickDeviceMapping.HatAmount-1 <= hatIndex
 			Return _joystickDevice.GetHat(hatIndex)
 		Endif

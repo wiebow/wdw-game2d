@@ -5,21 +5,18 @@ Namespace wdw.game2d
 #End
 Class Menu
 
-
 	#Rem monkeydoc Sets the menu to the main menu.
 	#End
 	Method Reset:Void()
 		_mode = MODE_MAINMENU
 	End Method
 
-
-	#Rem monkeydoc Updates the menu system.
+	#Rem monkeydoc @hidden Updates the menu system.
 
 	According to mode, the input keys are scanned.
 
 	#End
 	Method Update:Void()
-
 		Local input:= InputManager.GetInstance()
 
 		If _mode = MODE_MAINMENU
@@ -98,7 +95,6 @@ Class Menu
 	#Rem monkeydoc @hidden
 	#End
 	Method Render:Void(canvas:Canvas)
-
 		Local matrix:= canvas.Matrix
 		canvas.ClearMatrix()
 
@@ -110,7 +106,6 @@ Class Menu
 		End Select
 
 		canvas.Matrix = matrix
-
 	End Method
 
 
@@ -143,7 +138,8 @@ Class Menu
 		GAME.DrawText(canvas, "[ESCAPE] Continue Game",0,ypos)
 	End Method
 
-	' to do.
+	#Rem monkeydoc @hidden To do.
+	#End
 	Method DrawAudioMenu:Void( canvas:Canvas )
 		Local fontHeight:Int = GAME.Style.DefaultFont.Height
 		Local ypos:Int = DrawMenuBorder( canvas, 8)
@@ -153,6 +149,8 @@ Class Menu
 		GAME.DrawText(canvas, "Audio",0,ypos)
 	End Method
 
+	#Rem monkeydoc @hidden
+	#End
 	Method DrawControlsMenu:Void(canvas:Canvas)
 		Select InputManager.GetInstance().ActiveDevice
 			Case DEVICE_KEYBOARD	DrawKeyboardControls(canvas)

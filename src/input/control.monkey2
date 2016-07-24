@@ -170,6 +170,8 @@ Class JoystickAxisControl Extends Control
 End Class
 
 
+#Rem monkeydoc @hidden
+#End
 Class JoystickButtonControl Extends Control
 
 	Method New( label:String, index:Int )

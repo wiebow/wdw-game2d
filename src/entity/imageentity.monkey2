@@ -8,6 +8,7 @@ Class ImageEntity Extends Entity
 	#Rem monkeydoc Creates an entity with a single image frame.
 
 	@param image Image that this entity will display.
+
 	#End
 	Method New(image:Image)
 		_images = New Image[1]
@@ -18,6 +19,7 @@ Class ImageEntity Extends Entity
 	#Rem monkeydoc Creates an entity with an array of image frames.
 
 	@param images Array of images for this entity.
+
 	#End
 	Method New(images:Image[])
 		_images = images
@@ -76,7 +78,7 @@ Class ImageEntity Extends Entity
 		_color = value
 	End
 
-	#Rem monkeydoc Returns ot sets the entity rotation (in degrees)
+	#Rem monkeydoc Returns or sets the entity rotation (in degrees)
 	#End
 	Property Rotation:Float()
 		Return _rotation
@@ -97,6 +99,7 @@ Class ImageEntity Extends Entity
 
 		canvas.BlendMode = _blend
 		canvas.Color = _color
+
 		canvas.DrawImage(_images[_frame],
 			             RenderX, RenderY,
 			             DegreesToRadians(_rotation),
@@ -105,6 +108,8 @@ Class ImageEntity Extends Entity
 
 	Private
 
+	#Rem monkeydoc @hidden
+	#End
 	Method Initialize:Void()
 		_scale = New Vec2f(1.0, 1.0)
 		_frame = 0
@@ -114,7 +119,7 @@ Class ImageEntity Extends Entity
 		_blend = BlendMode.Alpha
 		_visible = True
 		_collision = True
-		_collisionRect = New Rectf
+'		_collisionRect = New Rectf
 
 		' set some sort of collision radius default.
 		Self.Radius = _images[0].Width/2
@@ -129,6 +134,6 @@ Class ImageEntity Extends Entity
 	Field _visible:Bool
 	Field _collision:Bool
 
-	Field _collisionRect:Rectf
+'	Field _collisionRect:Rectf
 
 End Class

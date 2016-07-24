@@ -5,6 +5,7 @@ Class PlayState Extends State
 	Field maxRocks:Int
 	Field rockSplit:Int
 	Field player:Player
+	Field camera:CameraEntity
 
 	Method Enter:Void() Override
 		CreatePlayer()
@@ -17,6 +18,15 @@ Class PlayState Extends State
 		maxRocks = 2
 		rockSplit = 2
 		CreateRocks()
+
+		local anchor:Entity = New Entity
+		anchor.ResetPosition(GAME.Width/2, GAME.Height/2)
+		AddEntity(anchor, LAYER_CAMERA)
+
+		camera = New CameraEntity
+		AddEntity( camera, LAYER_CAMERA)
+		camera.Target = anchor
+		camera.SnapToTarget()
 	End Method
 
 	Method Leave:Void() Override
@@ -81,6 +91,7 @@ Class PlayState Extends State
 			AddEntityToGroup( particle, "particles")
 		Next
 
+		camera.Shake(1)
 		GAME.PlaySound("explosion")
 	End Method
 

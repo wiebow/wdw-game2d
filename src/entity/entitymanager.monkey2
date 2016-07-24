@@ -12,7 +12,8 @@ Class EntityManager
 		Return _instance
 	End Function
 
-	'do not use.
+	#Rem monkeydoc @hidden
+	#End
 	Method New()
 		DebugAssert( _instance = False, "Unable to create another instance of singleton class: Controller")
 		_instance = Self
@@ -26,14 +27,15 @@ Class EntityManager
 		Self._instance = Null
 	End Method
 
-	'internal.
+	#Rem monkeydoc @hidden
+	#End
 	Method Initialize()
 		_renderLayers = New IntMap<EntityGroup>
 		_entityGroups = New StringMap<EntityGroup>
 		_locked = False
 	End Method
 
-	#Rem monkeydoc Updates this manager.
+	#Rem monkeydoc @hidden Updates this manager.
 
 	Entity positions are updated and any logic code is run.
 
@@ -67,7 +69,7 @@ Class EntityManager
 
 	End Method
 
-	#Rem monkeydoc Renders all entities in the manager.
+	#Rem monkeydoc @hidden Renders all entities in the manager.
 
 	Entities are drawn by render layer. Layer 0 is rendered first, etc.
 

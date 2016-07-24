@@ -78,13 +78,15 @@ Class Entity
 		_radius = value
 	End
 
-	' internal, called by entity manager during render
+	#Rem monkeydoc @hidden Called by entity manager during render.
+	#End
 	Method Interpolate(tween:Double)
 		_renderPosition.X = _position.X * tween + _previousPosition.X * (1.0 - tween )
 		_renderPosition.Y = _position.Y * tween + _previousPosition.Y * (1.0 - tween )
 	End Method
 
-	'internal, called by entity manager during update
+	#Rem monkeydoc @hidden Called by entity manager during update.
+	#End
 	Method UpdatePosition()
 		_previousPosition.X = _position.X
 		_previousPosition.Y = _position.Y

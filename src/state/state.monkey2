@@ -8,7 +8,6 @@ A state is like a 'screen' or a 'mode'. Examples are a 'titlestate' or a 'playst
 #End
 Class State Abstract
 
-
 	#Rem monkeydoc user hook for code when entering the state
 	#End
 	Method Enter:Void() Virtual
@@ -52,7 +51,6 @@ Class State Abstract
 	#End
 	Method PostRender:Void(canvas:Canvas, tween:Double) Virtual
 	End Method
-
 
 	#Rem monkeydoc Returns or sets the ID of this state.
 

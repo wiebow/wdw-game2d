@@ -6,7 +6,6 @@ Class PlayState Extends State
 	Field rockSplit:Int
 	Field player:Player
 
-
 	Method Enter:Void() Override
 		CreatePlayer()
 		player.Reset()
@@ -45,7 +44,6 @@ Class PlayState Extends State
 		rockCount = maxRocks
 	End Method
 
-
 	Method Update:Void() Override
 
 		if rockCount = 0
@@ -60,7 +58,6 @@ Class PlayState Extends State
 		If Keyboard.KeyHit( Key.E )
 			Self.CreateExplosion( New Vec2f(Rnd(0,GAME.Width), Rnd(0,GAME.Height)),20)
 		Endif
-
 	End Method
 
 	Method LevelUp:Void()
@@ -71,9 +68,7 @@ Class PlayState Extends State
 
 		local channel:= PlaySound("levelup")
 		channel.Volume = 1.0
-
 	End Method
-
 
 	Method CreateExplosion(position:Vec2f, amount:Int, speed:Float=0.9)
 		Local particle:Particle
@@ -87,7 +82,6 @@ Class PlayState Extends State
 		Next
 
 		GAME.PlaySound("explosion")
-
 	End Method
 
 	Method Render:Void(canvas:Canvas, tween:Double) Override

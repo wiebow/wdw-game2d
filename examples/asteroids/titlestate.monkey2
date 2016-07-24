@@ -1,39 +1,19 @@
 
-'namespace test
-
-Using game2d
-
-
 Class TitleState Extends State
 
 	Field logo:Image
 	Field scale:InterPolated
 
-	Method New()
+	Method Enter:Void() Override
+		EntityManager.GetInstance().RemoveAllEntities()
+	End Method
 
+	Method New()
 		logo = Image.Load("asset::logo.png")
 		DebugAssert( logo <> Null, "logo not loaded!!")
 		logo.Handle = New Vec2f(0.5, 0.5)
 		scale = New InterPolated(4.0,5.0,720)
-
-#rem
-		Local e:= New ImageEntity(images)
-		AddEntity(e, 0,"player")
-		e.ResetPosition(100,100)
-		e.Scale = New Vec2f(2.0,2.0)
-		e.Frame = 1
-		e.Color = Color.Red
-
-		Local e2:= New ImageEntity(images)
-		AddEntity(e2, 1, "rocks")
-		e2.ResetPosition(200,150)
-		e2.Scale = New Vec2f(2.0,2.0)
-		e2.Frame = 2
-		e2.Color = New Color(Rnd(0.5, 1.0), Rnd(0.5,1.0), Rnd(0.5,1.0))
-#End
-
 	End Method
-
 
 	Method Update:Void() Override
 		scale.Update()
@@ -42,7 +22,6 @@ Class TitleState Extends State
 			GAME.EnterState( PLAY_STATE, New TransitionFadein, New TransitionFadeout )
 		Endif
 	End Method
-
 
 	Method Render:Void(canvas:Canvas, tween:Double) Override
 

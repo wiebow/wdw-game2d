@@ -20,9 +20,14 @@ Class TransitionFadeout Extends Transition
 	End Method
 
 	Method Render:Void( canvas:Canvas ) Override
+		Local matrix:=canvas.Matrix
+		canvas.ClearMatrix()
+
 		canvas.Color = _color
 		canvas.BlendMode = BlendMode.Alpha
 		canvas.DrawRect( 0,0, GAME.Width, GAME.Height )
+
+		canvas.Matrix = matrix
 	End Method
 
 End Class

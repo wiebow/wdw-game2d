@@ -31,10 +31,11 @@ Const TITLE_STATE:Int = 0
 Const PLAY_STATE:Int = 1
 
 'render layers
-Const LAYER_ROCKS:Int = 0
-Const LAYER_BULLETS:Int = 1
-Const LAYER_PLAYER:Int = 2
-Const LAYER_PARTICLES:Int = 3
+Const LAYER_CAMERA:Int = 0
+Const LAYER_ROCKS:Int = 1
+Const LAYER_BULLETS:Int = 2
+Const LAYER_PLAYER:Int = 3
+Const LAYER_PARTICLES:Int = 4
 
 ' rock sizes, also image frames
 

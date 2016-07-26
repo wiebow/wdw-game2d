@@ -11,9 +11,10 @@ Class ImageEntity Extends Entity
 
 	#End
 	Method New(image:Image)
-		_images = New Image[1]
-		_images[0] = image
-		Self.Initialize()
+		Self.SetImage(image)
+'		_images = New Image[1]
+'		_images[0] = image
+		'Self.Initialize()
 	End Method
 
 	#Rem monkeydoc Creates an entity with an array of image frames.
@@ -22,11 +23,22 @@ Class ImageEntity Extends Entity
 
 	#End
 	Method New(images:Image[])
-		_images = images
-		Self.Initialize()
+		Self.SetImage(images)
+'		_images = images
+'		Self.Initialize()
 	End Method
 
 
+	Method SetImage:Void(image:Image)
+		_images = New Image[1]
+		_images[0] = image
+		Self.Initialize()
+	End Method
+
+	Method SetImage:Void(images:Image[])
+		_images = images
+		Self.Initialize()
+	End Method
 
 	#Rem monkeydoc Returns or sets the entity visibility flag.
 

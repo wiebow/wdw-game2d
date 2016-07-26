@@ -78,6 +78,17 @@ Class Entity
 		_radius = value
 	End
 
+	#Rem monkeydoc Returns or sets the entity collision flag.
+
+	When set to False, the entity does not participate in collision checks.
+
+	#End
+	Property Collision:Bool()
+		Return _collision
+	Setter( value:Bool )
+		_collision = value
+	End
+
 	#Rem monkeydoc @hidden Called by entity manager during render.
 	#End
 	Method Interpolate(tween:Double)
@@ -110,11 +121,12 @@ Class Entity
 	#Rem monkeydoc Checks collision between this and passed entity.
 
 	Uses circular collision check. Update the radius of your entity if results are off.
+	It can be overridden if you need to make your own collision code.
 
 	@return Bool
 
 	#End
-	Method CheckCollision:Bool(entity:Entity)
+	Method CheckCollision:Bool(entity:Entity) Virtual
 		Local dx:Float = Self.X - entity.X
 		Local dy:Float = Self.Y - entity.Y
 		Local distance:Float = Sqrt( dx*dx + dy*dy )
@@ -141,7 +153,8 @@ Class Entity
 	Field _renderLayer:EntityGroup
 	Field _group:EntityGroup
 
-	'collision radius
+	' collision settings
+	Field _collision:Bool
 	Field _radius:Float
 
 End Class

@@ -26,16 +26,7 @@ Class ImageEntity Extends Entity
 		Self.Initialize()
 	End Method
 
-	#Rem monkeydoc Returns or sets the entity collision flag.
 
-	When set to False, the entity does not participate in collision checks.
-
-	#End
-	Property Collision:Bool()
-		Return _collision
-	Setter( value:Bool )
-		_collision = value
-	End
 
 	#Rem monkeydoc Returns or sets the entity visibility flag.
 
@@ -118,8 +109,7 @@ Class ImageEntity Extends Entity
 		_color = Color.White
 		_blend = BlendMode.Alpha
 		_visible = True
-		_collision = True
-'		_collisionRect = New Rectf
+		Self.Collision = True
 
 		' set some sort of collision radius default.
 		Self.Radius = _images[0].Width/2
@@ -132,8 +122,5 @@ Class ImageEntity Extends Entity
 	Field _color:Color
 	Field _blend:BlendMode
 	Field _visible:Bool
-	Field _collision:Bool
-
-'	Field _collisionRect:Rectf
 
 End Class

@@ -38,6 +38,8 @@ Class Game2d Extends Window
 		_timer = New FixedTime
 		_states = New IntMap<State>
 		_sounds = New StringMap<Sound>
+		_images = New StringMap<Image>
+		_animImages = New StringMap<Image[]>
 
 		_texturefilterenabled = False
 		_running = True
@@ -309,12 +311,12 @@ Class Game2d Extends Window
 
 	#Rem monkeydoc Loads a sound from passed path to the sound library.
 
-	@param path Path to load file from.
-
 	@param name Name to store the sound with.
 
+	@param path Path to load file from.
+
 	#End
-	Method AddSound:Void( path:String, name:String)
+	Method AddSound:Void( name:String, path:String)
 		Local sound:= Sound.Load(path)
 		_sounds.Add(name, sound)
 	End Method
@@ -402,10 +404,36 @@ Class Game2d Extends Window
 		Return _configuration
 	End
 
+	Method AddImage:Void(name:String, path:String)
+		Local image:= Image.Load(path)
+		_images.Add( name, image )
+	End Method
+
+	Method AddAnimImage:Void(name:String, path:String, width:Int, height:Int, amount:Int)
+		Local image:Image[] = GrabAnimation(Image.Load(path), width, height, amount)
+		_animImages.Add( name, image )
+	End Method
+
+	Method GetImage:Image(name:String)
+		Return _images.Get(name)
+	End Method
+
+	Method GetImage:Image(name:String, frame:Int)
+		Return _animImages.Get(name)[frame]
+	End Method
+
+	Method GetAnimImage:Image[](name:String)
+		Return _animImages.Get(name)
+	End Method
+
 	Private
 
 	'sounds findable by name.
 	Field _sounds:StringMap<Sound>
+
+	'images, findeable by name.
+	Field _images:StringMap<Image>
+	Field _animImages:StringMap<Image[]>
 
 	Field _menu:Menu
 	Field _timer:FixedTime
@@ -445,4 +473,17 @@ End Class
 Function PlaySound:Channel( name:String, loops:Int = 0 )
 	Local channel:= GAME.PlaySound(name, loops)
 	Return channel
+End Function
+
+
+Function GetImage:Image(name:String)
+	Return GAME.GetImage( name )
+End Function
+
+Function GetImage:Image(name:String, frame:Int)
+	Return GAME.GetImage( name, frame )
+End Function
+
+Function GetAnimImage:Image[]( name:String )
+	Return GAME.GetAnimImage( name )
 End Function

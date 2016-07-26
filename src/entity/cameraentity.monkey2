@@ -12,7 +12,7 @@ Class CameraEntity Extends Entity
 		_moveDrag = 0.06
 		_viewPort = New Rectf
 		_targetVector = New Vec2f
-'		_shakeVector = New Vec2f
+		_shakeVector = New Vec2f
 	End Method
 
 	#Rem monkeydoc @hidden

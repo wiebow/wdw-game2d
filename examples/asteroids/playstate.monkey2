@@ -36,7 +36,7 @@ Class PlayState Extends State
 	End Method
 
 	Method CreatePlayer:Void()
-		player = New Player
+		player = New Player()
 		player.state = Self
 		AddEntity( player, LAYER_PLAYER)
 	End Method
@@ -44,7 +44,7 @@ Class PlayState Extends State
 	Method CreateRocks:Void()
 		Local rock:Rock
 		For Local i:= 0 Until maxRocks
-			rock = New Rock
+			rock = New Rock()
 			rock.SetSize(SIZE_BIG)
 
 			rock.ResetPosition( Rnd(10, GAME.Width-10), Rnd(10, GAME.Height-10))

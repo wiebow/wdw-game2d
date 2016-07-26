@@ -2,7 +2,7 @@
 Class Rock Extends ImageEntity
 
 	Method New()
-		Super.New(images)
+		Super.New( images )
 		Color = New Color( Rnd(0.5,1.0),Rnd(0.5,1.0),Rnd(0.5,1.0) )
 
 		Rotation = Rnd(360)

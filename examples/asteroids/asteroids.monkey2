@@ -86,13 +86,14 @@ Class Asteroids Extends Game2d
 		ApplyInputConfiguration()
 
 		'set global image
-		images = GrabAnimation(Image.Load("asset::rocks.png"),16,16,6)
+		AddAnimImage("sprites", "asset::rocks.png", 16,16,6)
+		images = GetAnimImage("sprites")
 
 		'add sounds, give easy to remember names.
-		AddSound( "asset::bullet.wav", "bullet" )
-		AddSound( "asset::explosion.wav", "explosion" )
-		AddSound( "asset::stageup.wav", "levelup" )
-		AddSound( "asset::warp.wav", "warp" )
+		AddSound( "bullet", "asset::bullet.wav" )
+		AddSound( "explosion", "asset::explosion.wav" )
+		AddSound( "levelup", "asset::stageup.wav" )
+		AddSound( "warp", "asset::warp.wav" )
 
 		AddState( New TitleState, TITLE_STATE )
 		AddState( New PlayState, PLAY_STATE )

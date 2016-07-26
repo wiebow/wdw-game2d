@@ -317,7 +317,7 @@ End Class
 
 #Rem monkeydoc Adds entity to the manager.
 
-The renderlayer and entitygroup are added to the manager if they do not exist.
+The renderlayer is added to the manager if it does not exist.
 
 @param entity The entity to add.
 
@@ -326,6 +326,22 @@ The renderlayer and entitygroup are added to the manager if they do not exist.
 #End
 Function AddEntity:Void( entity:Entity, renderLayer:Int)
 	EntityManager.GetInstance().AddEntityToRenderLayer(entity, renderLayer)
+End Function
+
+#Rem monkeydoc Adds entity to the manager.
+
+The renderlayer and entitygroup are added to the manager if they do not exist.
+
+@param entity The entity to add.
+
+@param renderLayer Layer index to add the entity to.
+
+@param groupName The group to add the entity to.
+
+#End
+Function AddEntity:Void( entity:Entity, renderLayer:Int, groupName:String)
+	EntityManager.GetInstance().AddEntityToRenderLayer(entity, renderLayer)
+	EntityManager.GetInstance().AddEntityToGroup(entity, groupName)
 End Function
 
 #Rem monkeydoc Removes entity from the manager.

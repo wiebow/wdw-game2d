@@ -404,6 +404,28 @@ Class Game2d Extends Window
 		Return _configuration
 	End
 
+
+	#Rem monkeydoc Sets the handle of the image with passed name.
+	#End
+	Method SetImageHandle(name:String,handle:Vec2f)
+		Local image:=GetImage(name)
+		If (image<>Null) image.Handle=handle
+	End Method
+
+	#Rem monkeydoc Sets the handle of all frames of the anim with passed name.
+	#End
+	Method SetAnimImageHandle(name:String,handle:Vec2f)
+		Local image:=GetAnimImage(name)
+		If (image<>Null)
+			For Local img:= Eachin image
+				img.Handle = handle
+			Next
+		Endif
+	End Method
+
+
+
+
 	Method AddImage:Void(name:String, path:String)
 		Local image:= Image.Load(path)
 		_images.Add( name, image )

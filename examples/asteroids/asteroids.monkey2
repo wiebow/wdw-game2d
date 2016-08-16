@@ -4,7 +4,7 @@
 
 #Import "<std>"
 #Import "<mojo>"
-#Import "<game2d>"
+#Import "<wdw-game2d>"    ' ensure you use the same module folder name.
 
 Using std..
 Using mojo..

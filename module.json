@@ -1,8 +1,8 @@
 {
-    "module" : "wdw.game2d",
-    "about" : "A framework for easy 2d game creation with Monkey2",
+    "module" : "wdw-game2d",
+    "about" : "A framework for easy 2d game creation with Monkey2.",
     "author" : "Wiebo de Wit",
-    "version" : "0.5.1",
+    "version" : "0.5.2",
     "support" : "https://github.com/mutatedmonkey/game2d",
     "depends" : ["std", "mojo"]
 }

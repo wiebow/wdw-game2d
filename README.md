@@ -12,11 +12,11 @@ Functionality will expand while games get written. Planned features can be found
 
 Installation
 -------------------------------------------------------------------------------
-Copy the repository content into a folder called 'game2d' in the Monkey2/modules/ folder.
+Copy the repository content into a folder called 'wdw-game2d' in the Monkey2/modules/ folder.
 
-Run __Monkey2/bin/mx2cc_linux makemods -clean -target=desktop game2d__ to build the module.
+Run __Monkey2/bin/mx2cc_linux makemods -clean -target=desktop wdw-game2d__ to build the module.
 
-You should be able to use it from now on by adding _#Import "< game2d >"_ to your main project file.
+You should be able to use it from now on by adding _#Import "< wdw.game2d >"_ to your main project file.
 
 An Asteroids clone make with Game2d is available as an example in the module folder, I advice you to compile that first.
 

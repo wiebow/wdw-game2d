@@ -104,7 +104,7 @@ Class Xbox360 Extends JoystickMapping
 End Class
 
 
-#Rem monkeydoc
+#Rem monkeydoc PS3 controller mappings from button and axis names to Monkey2 ids.
 #End
 Class Ps3 Extends JoystickMapping
 
@@ -156,7 +156,7 @@ Class Ps3 Extends JoystickMapping
 
 End Class
 
-#Rem monkeydoc
+#Rem monkeydoc PS4 controller mappings from button and axis names to Monkey2 ids.
 #End
 Class Ps4 Extends JoystickMapping
 

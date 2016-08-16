@@ -83,12 +83,19 @@ Class InputManager
 		Endif
 	End
 
+	#Rem monkeydoc Returns the currently programmed control.
+	#End
 	Property ProgrammedControl:Control()
 		Return _programmedControl
 	End
 
-	'retruns true if a control has been programmed
-	'menu uses this to reset the flashing line timer.
+
+	#Rem monkeydoc @hidden
+
+	returns true if a control has been programmed
+	menu uses this to reset the flashing line timer.
+
+	#End
 	Method Update:Bool()
 		If _programming
 			If _activeDevice = DEVICE_KEYBOARD
@@ -122,10 +129,18 @@ Class InputManager
 
 ' *** keyboard ***
 
+
+	#Rem monkeydoc Returns all keyboard controls.
+
+	@return StringMap
+
+	#End
 	Property KeyboardControls:StringMap<KeyboardControl>()
 		Return _keyboardControls
 	End
 
+	#Rem monkeydoc Adds a control with passed name and key code.
+	#End
 	Method AddKeyboardControl:Void( name:string, key:Int)'Key)
 		_keyboardControls.Set(name, New KeyboardControl(name, key) )
 	End Method
@@ -179,15 +194,29 @@ Class InputManager
 
 	End Method
 
+	#Rem monkeydoc Adds an axis control with passed name and index.
+
+	targetValue is not yet used.
+
+	#End
 	Method AddJoystickAxisControl:Void(name:String, buttonIndex:Int, targetValue:Float)
 		_joystickControls.Set(name, New JoystickAxisControl( name, buttonIndex, targetValue ))
 	End Method
 
+	#Rem monkeydoc Adds a button control with passed name and index.
+	#End
 	Method AddJoystickButtonControl:Void(name:String, buttonIndex:Int)
 		_joystickControls.Set( name, New JoystickButtonControl( name, buttonIndex) )
 	End Method
 
 
+	#Rem monkeydoc Returns all joystick controls.
+
+	The map contains both button and axis controls.
+
+	@return StringMap
+
+	#End
 	Property JoystickControls:StringMap<Control>()
 		Return _joystickControls
 	End
@@ -223,6 +252,11 @@ Class InputManager
 	End Method
 
 
+	#Rem monkeydoc Returns the value of the hat with passed index.
+
+	@return JoystickHat
+
+	#End
 	Method JoystickHatValue:JoystickHat(hatIndex:Int)
 		If _joystickDevice = Null Then Return JoystickHat.Centered
 		If _joystickDeviceMapping.HatAmount-1 <= hatIndex
@@ -233,6 +267,12 @@ Class InputManager
 
 ' *** configuration
 
+
+	#Rem monkeydoc @hidden
+
+	Processes passed configuration object.
+
+	#End
 	Method ApplyConfiguration:Void(config:JsonObject)
 
 		If config.Contains( "keyboardinput" )
@@ -287,38 +327,75 @@ End Class
 
 '--- helper functions ---------------------
 
+
+#Rem monkeydoc Adds joystick button control with passed name and index.
+#End
 Function AddJoystickButtonControl:Void( name:String, buttonIndex:Int )
 	InputManager.GetInstance().AddJoystickButtonControl(name, buttonIndex)
 End Function
 
+#Rem monkeydoc Adds joystick axis control with passed name and index.
+#End
 Function AddJoystickAxisControl:Void( name:String, axisindex:Int, targetValue:Float = 0.0)
 	InputManager.GetInstance().AddJoystickAxisControl(name, axisindex, targetValue)
 End Function
 
+#Rem monkeydoc Returns the down status of the button control with passed name.
+
+@return Bool
+
+#End
 Function JoystickButtonDown:Bool( name:String )
 	Return InputManager.GetInstance().JoystickButtonDown(name)
 End Function
 
+#Rem monkeydoc Returns the hit status of the button control with passed name.
+
+@return Bool
+
+#End
 Function JoystickButtonHit:Bool( name:String )
 	Return InputManager.GetInstance().JoystickButtonHit(name)
 End Function
 
+#Rem monkeydoc Returns the status of the axis control with passed name.
+
+@return Float
+
+#End
 Function JoystickAxisValue:Float( name:String )
 	Return InputManager.GetInstance().JoystickAxisValue(name)
 End Function
 
+#Rem monkeydoc Returns the status of the hat control with passed name.
+
+@return JoystickHat
+
+#End
 Function JoystickHatValue:JoystickHat( hatIndex:Int )
 	Return InputManager.GetInstance().JoystickHatValue(hatIndex)
 End Function
 
+#Rem monkeydoc Adds keyboard control with passed name and keycode.
+#End
 Function AddKeyboardControl:Void( name:String, key:Int)
 	InputManager.GetInstance().AddKeyboardControl(name, key)
 End Function
 
+#Rem monkeydoc Returns the down status of the keyboard control with passed name.
+
+@return Bool
+
+#End
 Function KeyboardControlDown:Bool( name:string )
 	Return InputManager.GetInstance().KeyDown(name)
 End Function
 
+#Rem monkeydoc Returns the hit status of the keyboard control with passed name.
+
+@return Bool
+
+#End
 Function KeyboardControlHit:Bool( name:string )
 	Return InputManager.GetInstance().KeyHit(name)
 End Function

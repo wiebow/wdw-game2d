@@ -118,6 +118,20 @@ Class Entity
 		_renderPosition = New Vec2f(x,y)
 	End Method
 
+	#Rem monkeydoc Forces the entity to passed X position.
+	#End
+	Method ResetX:Void(newX:Float)
+		_position.X = newX
+		_previousPosition.X = newX
+	End Method
+
+	#Rem monkeydoc Forces the entity to passed Y position.
+	#End
+	Method ResetY:Void(newY:Float)
+		_position.Y = newY
+		_previousPosition.Y = newY
+	End Method
+
 	#Rem monkeydoc Checks collision between this and passed entity.
 
 	Uses circular collision check. Update the radius of your entity if results are off.
@@ -152,6 +166,8 @@ Class Entity
 	Field _renderPosition:Vec2f
 	Field _renderLayer:EntityGroup
 	Field _group:EntityGroup
+
+
 
 	' collision settings
 	Field _collision:Bool

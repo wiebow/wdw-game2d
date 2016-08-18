@@ -29,6 +29,10 @@ Class CameraEntity Extends Entity
 		'move towards target
 		Position+=_targetVector
 
+		'lock horizontal or vertial position if needed
+		If LockedX Then Self.ResetX(_lockedXValue)
+		If LockedY Then Self.ResetY(_lockedYValue)
+
 		'shake?
 		If _shaking
 			Local rad:Float = DegreesToRadians(Rnd(360))
@@ -77,6 +81,37 @@ Class CameraEntity Extends Entity
 		_target = value
 	End
 
+
+
+	#Rem monkeydoc The
+	#End
+	Property LockedY:Bool()
+		Return _lockedY
+	Setter( value:Bool )
+		_lockedY = value
+	End
+
+	Property LockedX:Bool()
+		Return _lockedX
+	Setter( value:Bool )
+		_lockedX = value
+	End
+
+
+	#Rem monkeydoc Sets the X value the camera should stay on.
+	#End
+	Method SetLockedX:Void(value:Float)
+		_lockedXValue = value
+	End Method
+
+	#Rem monkeydoc Sets the Y value the camera should stay on.
+	#End
+	Method SetLockedY:Void(value:Float)
+		_lockedYValue = value
+	End Method
+
+
+
 	#Rem monkeydoc @hidden The camera view port.
 
 	Not supported yet.
@@ -98,6 +133,11 @@ Class CameraEntity Extends Entity
 	End
 
 	Private
+
+	Field _lockedX:Bool
+	Field _lockedY:Bool
+	Field _lockedXValue:Float
+	Field _lockedYValue:Float
 
 	Field _target:Entity
 	Field _targetVector:Vec2f

@@ -81,8 +81,6 @@ Class Game2d Extends Window
 		InputManager.GetInstance().ApplyConfiguration(_configuration)
 	End Method
 
-
-
 	#Rem monkeydoc Pause flag.
 	#End
 	Property Paused:Bool()
@@ -104,7 +102,6 @@ Class Game2d Extends Window
 		_vsync = value
 	End
 
-
 	#Rem monkeydoc @hidden Debug flag.
 	#End
 	Property Debug:Bool()
@@ -113,8 +110,7 @@ Class Game2d Extends Window
 		_debug = value
 	End
 
-
-	#Rem monkeydoc The texture enabled flag.
+	#Rem monkeydoc The texture filter enabled flag.
 
 	Setting this to false will remove filtering from all rendering.
 
@@ -124,7 +120,6 @@ Class Game2d Extends Window
 	Setter( value:Bool )
 		_texturefilterenabled = value
 	End
-
 
 	#Rem monkeydoc Returns or sets the game graphics resolution.
 	#End
@@ -191,9 +186,11 @@ Class Game2d Extends Window
 		If _leaveTransition Then _leaveTransition.Start()
 	End Method
 
+	#Rem monkeydoc @hidden main loop
 
-	' main loop
-	' update and render
+	Update and render
+
+	#End
 	Method OnRender(canvas:Canvas) Override
 
 		App.RequestRender()
@@ -257,7 +254,8 @@ Class Game2d Extends Window
 		EntityManager.GetInstance().Update()
 	End Method
 
-	' the actual rendering method.
+	#Rem monkeydoc @hidden The actual render method.
+	#End
 	Method GameRender:Void(canvas:Canvas, tween:Double)
 
 		canvas.TextureFilteringEnabled = _texturefilterenabled
@@ -404,7 +402,6 @@ Class Game2d Extends Window
 		Return _configuration
 	End
 
-
 	#Rem monkeydoc Sets the handle of the image with passed name.
 	#End
 	Method SetImageHandle(name:String,handle:Vec2f)
@@ -423,27 +420,68 @@ Class Game2d Extends Window
 		Endif
 	End Method
 
+	#Rem monkeydoc Adds image with passed name to library.
 
+	@param name Name under which to store the image
 
+	@param path File path to the image.
 
+	#End
 	Method AddImage:Void(name:String, path:String)
 		Local image:= Image.Load(path)
 		_images.Add( name, image )
 	End Method
 
+	#Rem monkeydoc Adds image with passed name to library.
+
+	@param name Name under which to store the image
+
+	@param path File path to the image.
+
+	@param width Horizontal size of frames.
+
+	@param height Vertical size of frames.
+
+	@param amount Number of frames to grab.
+
+	#End
 	Method AddAnimImage:Void(name:String, path:String, width:Int, height:Int, amount:Int)
 		Local image:Image[] = GrabAnimation(Image.Load(path), width, height, amount)
 		_animImages.Add( name, image )
 	End Method
 
+	#Rem monkeydoc Returns an image.
+
+	@param name Name under which the image was stored
+
+	@return Image
+
+	#End
 	Method GetImage:Image(name:String)
 		Return _images.Get(name)
 	End Method
 
+	#Rem monkeydoc Returns a image from array.
+
+	@param name Name under which the image was stored.
+
+	@param frame Index of the frame to return.
+
+	@return Image
+
+	#End
 	Method GetImage:Image(name:String, frame:Int)
 		Return _animImages.Get(name)[frame]
 	End Method
 
+
+	#Rem monkeydoc Returns all frames from image array.
+
+	@param name Name under which the image was stored.
+
+	@return Image Array
+
+	#End
 	Method GetAnimImage:Image[](name:String)
 		Return _animImages.Get(name)
 	End Method
@@ -485,6 +523,8 @@ End Class
 
 
 
+
+
 #Rem monkeydoc Plays sound that is stored under passed name.
 
 @param name Name under which the sound is stored.
@@ -497,15 +537,37 @@ Function PlaySound:Channel( name:String, loops:Int = 0 )
 	Return channel
 End Function
 
+#Rem monkeydoc Returns an image.
 
+@param name Name under which the image was stored
+
+@return Image
+
+#End
 Function GetImage:Image(name:String)
 	Return GAME.GetImage( name )
 End Function
 
+#Rem monkeydoc Returns a image from array.
+
+@param name Name under which the image was stored.
+
+@param frame Index of the frame to return.
+
+@return Image
+
+#End
 Function GetImage:Image(name:String, frame:Int)
 	Return GAME.GetImage( name, frame )
 End Function
 
+#Rem monkeydoc Returns all frames from image array.
+
+@param name Name under which the image was stored.
+
+@return Image Array
+
+#End
 Function GetAnimImage:Image[]( name:String )
 	Return GAME.GetAnimImage( name )
 End Function

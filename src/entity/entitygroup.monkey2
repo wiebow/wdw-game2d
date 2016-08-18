@@ -52,9 +52,12 @@ Class EntityGroup
 		_entities.Remove(entity)
 	End Method
 
-	' entityects added or removed during locked state are processed here.
-	' called by the entity manager when it is no longer locked.
-	' do not call by yourself.
+	#Rem monkeydoc @hidden
+
+	Entities added or removed during locked state are processed here.
+	Called by the entity manager when it is no longer locked.
+	Do not call by yourself.
+	#End
 	Method ProcessQueues:Void()
 		For Local entity:= Eachin _toAdd
 			Self.AddEntity(entity)

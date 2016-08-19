@@ -1,4 +1,5 @@
 
+
 Class Player Extends ImageEntity
 
 	Field lives:Int
@@ -56,7 +57,8 @@ Class Player Extends ImageEntity
 
 		if immune
 			immuneDelay-=1
-			If immuneDelay Mod immuneFlashDelay = 0
+
+			if immuneDelay Mod immuneFlashDelay = 0
 				self.Visible = not self.Visible
 			endif
 
@@ -128,7 +130,7 @@ Class Player Extends ImageEntity
 					Self.lives-=1
 					Self.Visible = False
 					state.CreateExplosion(Position, 15,0.7)
-				endif
+				end if
 			Next
 
 			'saucer bullet collision

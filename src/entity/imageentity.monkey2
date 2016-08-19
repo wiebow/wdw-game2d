@@ -46,6 +46,16 @@ Class ImageEntity Extends Entity
 		_images = images
 	End Method
 
+	#Rem monkeydoc Sets handle of all images in the entity.
+	#End
+	Method SetImageHandles:Void(handle:Vec2f)
+		If Not _images Then Return
+
+		For Local img:= Eachin _images
+			img.Handle = handle
+		Next
+	End Method
+
 
 	Property Images:Image[]()
 		Return _images

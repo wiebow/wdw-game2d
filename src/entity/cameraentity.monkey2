@@ -135,7 +135,7 @@ Class CameraEntity Extends Entity
 
 	Private
 
-	Field _moveArea:Rectf  ' needed?  we have x and y range
+	Field _moveArea:Rectf
 
 	Field _target:Entity
 	Field _targetVector:Vec2f
@@ -146,7 +146,7 @@ Class CameraEntity Extends Entity
 	Field _shakeRadius:Float
 	Field _shakeVector:Vec2f
 
-	'the camera sees this area of the world
+	'the camera sees this area of the world.
 	Field _viewPort:Rectf
 
 End Class

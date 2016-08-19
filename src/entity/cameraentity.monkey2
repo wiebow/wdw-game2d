@@ -10,9 +10,9 @@ Class CameraEntity Extends Entity
 
 	Method New:Void()
 		_moveDrag = 0.06
-		_viewPort = New Rectf
 		_targetVector = New Vec2f
 		_shakeVector = New Vec2f
+		_moveArea = Null
 	End Method
 
 	#Rem monkeydoc @hidden
@@ -29,10 +29,6 @@ Class CameraEntity Extends Entity
 		'move towards target
 		Position+=_targetVector
 
-		'lock horizontal or vertial position if needed
-		If LockedX Then Self.ResetX(_lockedXValue)
-		If LockedY Then Self.ResetY(_lockedYValue)
-
 		'shake?
 		If _shaking
 			Local rad:Float = DegreesToRadians(Rnd(360))
@@ -41,6 +37,28 @@ Class CameraEntity Extends Entity
 			_shakeRadius *= 0.95
 			If _shakeRadius < 0.001 Then _shaking = false
 		Endif
+
+		'constrain movement if required
+		If _moveArea <> Null
+			If X < _moveArea.Left
+				Self.ResetX(_moveArea.Left)
+			ElseIf X > _moveArea.Right
+				Self.ResetX(_moveArea.Right)
+			Endif
+
+			If Y < _moveArea.Top
+				Self.ResetY(_moveArea.Top)
+			ElseIf Y > _moveArea.Bottom
+				Self.ResetY(_moveArea.Bottom)
+			Endif
+		EndIf
+
+		'update the viewport
+
+		_viewPort = New Rectf(  X - GAME.GameResolution.X/2,
+								Y - GAME.GameResolution.Y/2,
+								X + GAME.GameResolution.X/2,
+								Y + GAME.GameResolution.Y/2)
 
 	End Method
 
@@ -60,7 +78,7 @@ Class CameraEntity Extends Entity
 		Self.ResetPosition(_target.X, _target.Y)
 	End Method
 
-	#Rem monkeydoc Returns true if the passed entity is in the camera view.
+	#Rem monkeydoc Returns true if the passed entity position is in the camera view.
 	#End
 	Method CanSee:Bool(entity:Entity)
 		Return _viewPort.Contains(entity.Position)
@@ -74,6 +92,9 @@ Class CameraEntity Extends Entity
 	End Method
 
 	#Rem monkeydoc The camera target entity.
+
+	The camera will follow this entity.
+
 	#End
 	Property Target:Entity()
 		Return _target
@@ -81,49 +102,16 @@ Class CameraEntity Extends Entity
 		_target = value
 	End
 
-
-
-	#Rem monkeydoc The
-	#End
-	Property LockedY:Bool()
-		Return _lockedY
-	Setter( value:Bool )
-		_lockedY = value
-	End
-
-	Property LockedX:Bool()
-		Return _lockedX
-	Setter( value:Bool )
-		_lockedX = value
-	End
-
-
-	#Rem monkeydoc Sets the X value the camera should stay on.
-	#End
-	Method SetLockedX:Void(value:Float)
-		_lockedXValue = value
-	End Method
-
-	#Rem monkeydoc Sets the Y value the camera should stay on.
-	#End
-	Method SetLockedY:Void(value:Float)
-		_lockedYValue = value
-	End Method
-
-
-
-	#Rem monkeydoc @hidden The camera view port.
-
-	Not supported yet.
-
+	#Rem monkeydoc Returns the camera view port.
 	#End
 	Property ViewPort:Rectf()
 		Return _viewPort
-	Setter( value:Rectf )
-		_viewPort = value
 	End
 
 	#Rem monkeydoc The delay (drag) on the camera movement.
+
+	Default is a drag of 0.06. Setting this to 0 will disable all camera movement.
+
 	#End
 	Property MoveDelay:Float()
 		Return _moveDrag
@@ -132,12 +120,22 @@ Class CameraEntity Extends Entity
 		_moveDrag = value
 	End
 
+	#Rem monkeydoc The camera movement area bounds.
+
+	Constrains movement of the camera. For example, setting this with a rect of -100,50,100,50 will create a camera that can move horizontal 200 pixels, but not vertical.
+
+	By default there are no restictions to the movement.
+
+	#End
+	Property MoveArea:Rectf()
+		Return _moveArea
+	Setter( value:Rectf )
+		_moveArea = value
+	End
+
 	Private
 
-	Field _lockedX:Bool
-	Field _lockedY:Bool
-	Field _lockedXValue:Float
-	Field _lockedYValue:Float
+	Field _moveArea:Rectf  ' needed?  we have x and y range
 
 	Field _target:Entity
 	Field _targetVector:Vec2f

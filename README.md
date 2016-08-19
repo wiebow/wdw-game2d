@@ -49,7 +49,8 @@ Graphics:
 Game Entities:
 
   * entity manager (render layers, entity groups)
-  * image entity
+  * image entity (single and animated)
+  * camera entity (follow entity, movement bounds)
 
 Sound:
 

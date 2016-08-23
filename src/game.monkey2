@@ -28,6 +28,8 @@ Class Game2d Extends Window
 		InputManager.GetInstance().DetectJoystick()
 		EntityManager.GetInstance()
 
+		ClearColor=Color.Black
+
 		' try to load the file config.json
 		Self.LoadConfiguration()
 
@@ -288,12 +290,20 @@ Class Game2d Extends Window
 
 	#Rem monkeydoc Draws text, centered horizontally by default.
 	#End
-	Method DrawText:Void( canvas:Canvas, text:String, x:Int, y:Int, centered:Bool = True )
+	Method DrawText:Void( canvas:Canvas, text:String, x:Int, y:Int, centered:Bool = True, shadow:Bool=False )
 
 		If centered
 			Local w:Int = Style.DefaultFont.TextWidth(text) / 2
 			x = Width/2-w
 		Endif
+
+		If shadow
+			Local c:Color = canvas.Color
+			canvas.Color = Color.Black
+			canvas.DrawText( text, x, y+1 )
+			canvas.Color = c
+		Endif
+
 		canvas.DrawText( text, x, y )
 	End Method
 

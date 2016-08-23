@@ -9,6 +9,10 @@ Default image handle is at the center.
 
 #End
 Function GrabAnimation:Image[]( source:Image, w:Int, h:Int, count:Int )
+
+	DebugAssert( source<>null, "GrabAnimation: no source image!!!!")
+
+
 	local anim:= New Image[count]
 	local x:Int = 0
 	local y:int = 0

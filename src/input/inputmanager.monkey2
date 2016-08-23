@@ -42,6 +42,8 @@ Class InputManager
 
 		_programming = False
 		_activeDevice = DEVICE_KEYBOARD
+		_joystickDevice = Null
+		_joystickDeviceMapping = Null
 
 		_keyboardControls = New StringMap<KeyboardControl>
 		_joystickControls = New StringMap<Control>
@@ -89,7 +91,6 @@ Class InputManager
 		Return _programmedControl
 	End
 
-
 	#Rem monkeydoc @hidden
 
 	returns true if a control has been programmed
@@ -128,7 +129,6 @@ Class InputManager
 	End Method
 
 ' *** keyboard ***
-
 
 	#Rem monkeydoc Returns all keyboard controls.
 
@@ -176,7 +176,7 @@ Class InputManager
 		'we only use the first pad on the system
 
 		_joystickDevice = JoystickDevice.Open( 0 )
-		If Not _joystickDevice Return
+		If Not _joystickDevice Then Return
 
 		Select _joystickDevice.Name
 			Case JOYSTICK_XBOX, JOYSTICK_XBOX2
@@ -196,7 +196,7 @@ Class InputManager
 
 	#Rem monkeydoc Adds an axis control with passed name and index.
 
-	targetValue is not yet used.
+	Note: targetValue is not yet used.
 
 	#End
 	Method AddJoystickAxisControl:Void(name:String, buttonIndex:Int, targetValue:Float)
@@ -209,7 +209,6 @@ Class InputManager
 		_joystickControls.Set( name, New JoystickButtonControl( name, buttonIndex) )
 	End Method
 
-
 	#Rem monkeydoc Returns all joystick controls.
 
 	The map contains both button and axis controls.
@@ -221,44 +220,48 @@ Class InputManager
 		Return _joystickControls
 	End
 
+	#Rem monkeydoc Returns the detected device.
+	#End
 	Property JoystickDevice:JoystickDevice()
 		Return _joystickDevice
 	End
 
+	#Rem monkeydoc Returns the device mapping.
+	#End
 	Property JoystickMapping:JoystickMapping()
 		Return _joystickDeviceMapping
 	End
 
+	#Rem monkeydoc Returns the name of the device.
+	#End
 	Property JoyStickLabel:String()
 		Return _joystickDeviceMapping.Label
 	End
 
 	Method JoystickButtonHit:Bool( name:String )
 		If _joystickDevice = Null Then Return False
+		If _joystickDeviceMapping = Null Then Return False
 		Local control:JoystickButtonControl = Cast<JoystickButtonControl>(_joystickControls.Get(name) )
 		Return control.Hit()
 	End Method
 
 	Method JoystickButtonDown:Bool( name:String )
 		If _joystickDevice = Null Then Return False
+		If _joystickDeviceMapping = Null Then Return False
 		Local control:JoystickButtonControl = Cast<JoystickButtonControl>(_joystickControls.Get(name) )
 		Return control.Down()
 	End Method
 
 	Method JoystickAxisValue:Float( name:String )
 		If _joystickDevice = Null Then Return 0.0
+		If _joystickDeviceMapping = Null Then Return 0.0
 		Local control:JoystickAxisControl = Cast<JoystickAxisControl>(_joystickControls.Get(name) )
 		Return control.Value()
 	End Method
 
-
-	#Rem monkeydoc Returns the value of the hat with passed index.
-
-	@return JoystickHat
-
-	#End
 	Method JoystickHatValue:JoystickHat(hatIndex:Int)
 		If _joystickDevice = Null Then Return JoystickHat.Centered
+		If _joystickDeviceMapping = Null Then Return JoystickHat.Centered
 		If _joystickDeviceMapping.HatAmount-1 <= hatIndex
 			Return _joystickDevice.GetHat(hatIndex)
 		Endif

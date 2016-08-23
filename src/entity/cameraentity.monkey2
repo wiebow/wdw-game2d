@@ -55,7 +55,7 @@ Class CameraEntity Extends Entity
 
 		'update the viewport
 
-		_viewPort = New Rectf(  X - GAME.GameResolution.X/2,
+		_viewport = New Rectf(  X - GAME.GameResolution.X/2,
 								Y - GAME.GameResolution.Y/2,
 								X + GAME.GameResolution.X/2,
 								Y + GAME.GameResolution.Y/2)
@@ -81,7 +81,7 @@ Class CameraEntity Extends Entity
 	#Rem monkeydoc Returns true if the passed entity position is in the camera view.
 	#End
 	Method CanSee:Bool(entity:Entity)
-		Return _viewPort.Contains(entity.Position)
+		Return _viewport.Contains(entity.Position)
 	End Method
 
 	#Rem monkeydoc Shakes the camera, starting with passed radius.
@@ -104,8 +104,8 @@ Class CameraEntity Extends Entity
 
 	#Rem monkeydoc Returns the camera view port.
 	#End
-	Property ViewPort:Rectf()
-		Return _viewPort
+	Property Viewport:Rectf()
+		Return _viewport
 	End
 
 	#Rem monkeydoc The delay (drag) on the camera movement.
@@ -147,6 +147,6 @@ Class CameraEntity Extends Entity
 	Field _shakeVector:Vec2f
 
 	'the camera sees this area of the world.
-	Field _viewPort:Rectf
+	Field _viewport:Rectf
 
 End Class

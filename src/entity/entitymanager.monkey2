@@ -39,7 +39,7 @@ Class EntityManager
 
 	Entity positions are updated and any logic code is run.
 
-	During the update no entities can be added or removed from the manager, this is done after the update.
+	During the update no entities can be added or removed from the manager, this is done after the update pass.
 
 	#End
 	Method Update:Void()
@@ -73,7 +73,7 @@ Class EntityManager
 
 	Entities are drawn by render layer. Layer 0 is rendered first, etc.
 
-	Adding or removing entities during the render pass will result in runtime errors. Never add these kind of commands in entity render code.
+	During the render pass no entities can be added or removed from the manager, this is done after the render pass.
 
 	@param tween Render tween value.
 
@@ -85,16 +85,22 @@ Class EntityManager
 			For Local entity:= Eachin renderLayer.Entities
 				entity.Interpolate(tween)
 				entity.Render(canvas)
+
+				If GAME.Debug Then entity.RenderDebug(canvas)
 			Next
-'			renderLayer.Render(canvas, tween)
 		Next
 		_locked = False
 
 		If GAME.Debug
+			Local matrix:= canvas.Matrix
+			canvas.ClearMatrix()
+
 			local color:= canvas.Color
 			canvas.Color = Color.Green
-			GAME.DrawText(canvas, "entities:" + _totals, 0, 10, False)
+			GAME.DrawText(canvas, "#:" + _totals, 0, 10, False)
 			canvas.Color = color
+
+			canvas.Matrix = matrix
 		Endif
 
 	End Method
@@ -380,3 +386,4 @@ End Function
 Function RemoveAllEntities:Void()
 	EntityManager.GetInstance().RemoveAllEntities()
 End Function
+

@@ -143,10 +143,42 @@ Class Entity
 	Method CheckCollision:Bool(entity:Entity) Virtual
 		Local dx:Float = Self.X - entity.X
 		Local dy:Float = Self.Y - entity.Y
-		Local distance:Float = Sqrt( dx*dx + dy*dy )
+		Local distance:Float = Self.Distance(entity)'Sqrt( dx*dx + dy*dy )
 		Local radii:Float = Self.Radius + entity.Radius
 		If radii < distance Then Return False
 		Return True
+	End Method
+
+	#Rem monkeydoc Checks collision with all entities in passed group.
+
+	The first entity collided with is returned.
+
+	@param groupName Entity group to check collision with.
+
+	@return Entity
+
+	#End
+	Method CollideWithGroup:Entity( groupName:String )
+		Local group:= GetEntityGroup(groupName)
+		If group = Null Then Return Null
+
+		For local e:Entity = Eachin group.Entities
+			If Self.CheckCollision(e) = True Then Return e
+		Next
+		Return Null
+	End Method
+
+	#Rem monkeydoc Returns the distance between entities.
+
+	@param entity The entity to check distance with.
+
+	@return Float
+
+	#End
+	Method Distance:Float(entity:Entity)
+		Local dx:Float = Self.X - entity.X
+		Local dy:Float = Self.Y - entity.Y
+		Return Sqrt( dx*dx + dy*dy )
 	End Method
 
 	#Rem monkeydoc hook for entity update code.
@@ -159,6 +191,19 @@ Class Entity
 	Method Render:Void(canvas:Canvas) Virtual
 	End Method
 
+	#Rem monkeydoc @hidden
+
+	Some debug display info
+
+	#End
+	Method RenderDebug:Void(canvas:Canvas)
+		canvas.BlendMode = BlendMode.Alpha
+		canvas.Scale(1.0, 1.0)
+		canvas.Color = New Color(1.0,1.0,0.0, 0.2)
+		canvas.DrawCircle( RenderX, RenderY, _radius )
+	End Method
+
+
 	Private
 
 	Field _position:Vec2f
@@ -167,11 +212,10 @@ Class Entity
 	Field _renderLayer:EntityGroup
 	Field _group:EntityGroup
 
-
-
 	' collision settings
 	Field _collision:Bool
 	Field _radius:Float
+	Field _rect:Recti
 
 End Class
 

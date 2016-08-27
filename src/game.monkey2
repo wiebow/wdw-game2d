@@ -28,6 +28,7 @@ Class Game2d Extends Window
 		InputManager.GetInstance().DetectJoystick()
 		EntityManager.GetInstance()
 
+		'set possible borders in window to black
 		ClearColor=Color.Black
 
 		' try to load the file config.json
@@ -284,8 +285,13 @@ Class Game2d Extends Window
 	#Rem monkeydoc @hidden
 	#End
 	Method DrawDebug:Void(canvas:Canvas)
+		local matrix:= canvas.Matrix
+		canvas.ClearMatrix()
+
 		canvas.Color = Color.Green
 		canvas.DrawText(""+ App.FPS, 0, GAME.Height-10)
+
+		canvas.Matrix = matrix
 	End Method
 
 	#Rem monkeydoc Draws text, centered horizontally by default.
@@ -326,6 +332,7 @@ Class Game2d Extends Window
 	#End
 	Method AddSound:Void( name:String, path:String)
 		Local sound:= Sound.Load(path)
+		If sound = Null then RuntimeError("AddSound: Could not load sound: " + path)
 		_sounds.Add(name, sound)
 	End Method
 
@@ -432,6 +439,8 @@ Class Game2d Extends Window
 
 	#Rem monkeydoc Adds image with passed name to library.
 
+	By default, the image handle is set to the center.
+
 	@param name Name under which to store the image
 
 	@param path File path to the image.
@@ -439,6 +448,8 @@ Class Game2d Extends Window
 	#End
 	Method AddImage:Void(name:String, path:String)
 		Local image:= Image.Load(path)
+		If image = Null then RuntimeError("AddImage: Could not load image: " + path)
+		image.Handle = New Vec2f(0.5,0.5)
 		_images.Add( name, image )
 	End Method
 
@@ -457,6 +468,7 @@ Class Game2d Extends Window
 	#End
 	Method AddAnimImage:Void(name:String, path:String, width:Int, height:Int, amount:Int)
 		Local image:Image[] = GrabAnimation(Image.Load(path), width, height, amount)
+		If image = Null then RuntimeError("AddAnimImage: Could not load image: " + path)
 		_animImages.Add( name, image )
 	End Method
 

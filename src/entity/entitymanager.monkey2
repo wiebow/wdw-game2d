@@ -151,7 +151,6 @@ Class EntityManager
 		_entityGroups.Remove(groupName)
 	End Method
 
-
 	#Rem monkeydoc Adds entity to the passed group.
 
 	@param entity The entity to add.
@@ -241,7 +240,6 @@ Class EntityManager
 		_renderLayers.Remove(index)
 	End Method
 
-
 	#Rem monkeydoc Adds entity to the renderlayer with passed index.
 
 	The render layer is created if it is not present in the manager.
@@ -262,7 +260,6 @@ Class EntityManager
 
 		entity.RenderLayer = layer
 	End Method
-
 
 	#Rem monkeydoc Removes passed entity from its render layer.
 
@@ -320,6 +317,10 @@ Class EntityManager
 	Field _entityGroups:StringMap<EntityGroup>
 
 End Class
+
+
+
+
 
 #Rem monkeydoc Adds entity to the manager.
 

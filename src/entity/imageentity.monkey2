@@ -147,7 +147,7 @@ Class ImageEntity Extends Entity
 		Self.Collision = True
 
 		' set some sort of collision radius default.
-		Self.Radius = _images[0].Width/2
+		Self.CollisionRadius = _images[0].Width/2
 	End Method
 
 	Field _scale:Vec2f

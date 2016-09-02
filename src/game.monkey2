@@ -319,7 +319,6 @@ Class Game2d Extends Window
 	End Method
 
 
-
 ' *** audio ***
 
 
@@ -336,22 +335,18 @@ Class Game2d Extends Window
 		_sounds.Add(name, sound)
 	End Method
 
-
-	#Rem monkeydoc Plays the sound with passed name.
+	#Rem monkeydoc Returns the sound stored under passed name.
 
 	@param name Name under which the sound is stored.
 
-	@param loops The amount of times the sound must be played.
-
-	@return The channel the sound is played on.
-
 	#End
-	Method PlaySound:Channel( name:String, loops:Int=0)
+	Method GetSound:Sound( name:String )
 		Local sound:= _sounds.Get(name)
-		DebugAssert( sound=true, "could not load sound" + name)
-		Local channel:= sound.Play(loops)
-		Return channel
+		DebugAssert( sound=true, "could not get sound" + name)
+		Return sound
 	End Method
+
+' *** configuation ****
 
 	#Rem monkeydoc @hidden
 	#End
@@ -423,14 +418,14 @@ Class Game2d Extends Window
 	#End
 	Method SetImageHandle(name:String,handle:Vec2f)
 		Local image:=GetImage(name)
-		If (image<>Null) image.Handle=handle
+		If image<>Null Then image.Handle=handle
 	End Method
 
 	#Rem monkeydoc Sets the handle of all frames of the anim with passed name.
 	#End
 	Method SetAnimImageHandle(name:String,handle:Vec2f)
 		Local image:=GetAnimImage(name)
-		If (image<>Null)
+		If image<>Null
 			For Local img:= Eachin image
 				img.Handle = handle
 			Next
@@ -441,7 +436,7 @@ Class Game2d Extends Window
 
 	By default, the image handle is set to the center.
 
-	@param name Name under which to store the image
+	@param name Name under which to store the image.
 
 	@param path File path to the image.
 
@@ -453,9 +448,11 @@ Class Game2d Extends Window
 		_images.Add( name, image )
 	End Method
 
-	#Rem monkeydoc Adds image with passed name to library.
+	#Rem monkeydoc Adds frames of images with passed name to library.
 
-	@param name Name under which to store the image
+	By default, the image handle is set to the center of each frame.
+
+	@param name Name under which to store the image.
 
 	@param path File path to the image.
 
@@ -474,7 +471,7 @@ Class Game2d Extends Window
 
 	#Rem monkeydoc Returns an image.
 
-	@param name Name under which the image was stored
+	@param name Name under which the image was stored.
 
 	@return Image
 
@@ -543,23 +540,35 @@ Class Game2d Extends Window
 
 End Class
 
-
-
 #Rem monkeydoc Plays sound that is stored under passed name.
 
 @param name Name under which the sound is stored.
 
-@param loops Number of additional repeats of the sound.
+@param volume Loudness of the playback.
+
+@param rate Playback rate (speed)
+
+@param pan Position of sound. -1 is left, +1 is right.
+
+@return Channel
 
 #End
-Function PlaySound:Channel( name:String, loops:Int = 0 )
-	Local channel:= GAME.PlaySound(name, loops)
+Function PlaySound:Channel( name:String, volume:Float=1.0, rate:Float=1.0, pan:Float=0.0, channel:Channel=Null  )
+
+	Local sound:= GAME.GetSound(name)
+	If sound = Null Then RuntimeError("Playsound: Could not find sound with name: " + name)
+
+	If channel = Null Then channel = New Channel
+	channel.Volume = volume
+	channel.Rate = rate
+	channel.Pan = pan
+	channel.Play(sound)
 	Return channel
 End Function
 
 #Rem monkeydoc Returns an image.
 
-@param name Name under which the image was stored
+@param name Name under which the image was stored.
 
 @return Image
 

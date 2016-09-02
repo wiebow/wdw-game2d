@@ -201,7 +201,7 @@ Class Entity
 				Local distanceY:Float = Self.Y - closestY
 
 				Local distance:Float = (distanceX * distanceX) + (distanceY * distanceY)
-				Return distance < ( entity.CollisionRadius * entity.CollisionRadius )
+				Return distance < ( Self.CollisionRadius * Self.CollisionRadius )
 			Else
 				'circle2circle
 
@@ -247,6 +247,16 @@ Class Entity
 		Local dy:Float = Self.Y - entity.Y
 		Return Sqrt( dx*dx + dy*dy )
 	End Method
+
+	#Rem monkeydoc Returns vector to other entity.
+	#End
+	Method EntityVector:Vec2f( entity:Entity )
+		Return Position-entity.Position' New Vec2f( Self.X, Self.Y)
+		'Local v:TVector2D = e1.GetPosition().Get().Clone()
+'		v.SubstractV( e2.GetPosition().Get() )
+'		Returnsrn v
+	End Method
+
 
 	#Rem monkeydoc hook for entity update code.
 	#End

@@ -3,7 +3,7 @@ Namespace wdw.game2d
 
 #Rem monkeydoc Entity that can be attached to an entity.
 
-Camera entity MUST be added to renderlayer 0 to ensure that the made changes to the drawoffset apply to ALL entities in the entity manager.
+Camera entity MUST be added to the lowest renderlayer (normally this is layer with id 0) to ensure that the made changes to the drawoffset apply to ALL entities in the entity manager.
 
 #End
 Class CameraEntity Extends Entity
@@ -29,7 +29,13 @@ Class CameraEntity Extends Entity
 		'move towards target
 		Position+=_targetVector
 
-		'shake?
+		Self.Shake()
+		Self.ConstrainMovement()
+		Self.UpdateViewPort()
+	End Method
+
+
+	Method Shake:Void()
 		If _shaking
 			Local rad:Float = DegreesToRadians(Rnd(360))
 			_shakeVector = New Vec2f(Sin(rad), Cos(rad))
@@ -37,8 +43,16 @@ Class CameraEntity Extends Entity
 			_shakeRadius *= 0.95
 			If _shakeRadius < 0.001 Then _shaking = false
 		Endif
+	End Method
 
-		'constrain movement if required
+	Method UpdateViewPort:Void()
+		_viewport = New Rectf(  X - GAME.GameResolution.X/2,
+								Y - GAME.GameResolution.Y/2,
+								X + GAME.GameResolution.X/2,
+								Y + GAME.GameResolution.Y/2)
+	End Method
+
+	Method ConstrainMovement:Void()
 		If _moveArea <> Null
 			If X < _moveArea.Left
 				Self.ResetX(_moveArea.Left)
@@ -52,15 +66,8 @@ Class CameraEntity Extends Entity
 				Self.ResetY(_moveArea.Bottom)
 			Endif
 		EndIf
-
-		'update the viewport
-
-		_viewport = New Rectf(  X - GAME.GameResolution.X/2,
-								Y - GAME.GameResolution.Y/2,
-								X + GAME.GameResolution.X/2,
-								Y + GAME.GameResolution.Y/2)
-
 	End Method
+
 
 	#Rem monkeydoc @hidden
 	#End
@@ -133,6 +140,13 @@ Class CameraEntity Extends Entity
 		_moveArea = value
 	End
 
+	Property TargetVector:Vec2f()
+		Return _targetVector
+	Setter( value:Vec2f )
+		_targetVector = value
+	End
+
+
 	Private
 
 	Field _moveArea:Rectf
@@ -145,6 +159,7 @@ Class CameraEntity Extends Entity
 	Field _shaking:Bool
 	Field _shakeRadius:Float
 	Field _shakeVector:Vec2f
+
 
 	'the camera sees this area of the world.
 	Field _viewport:Rectf

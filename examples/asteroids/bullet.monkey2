@@ -14,7 +14,7 @@ Class Bullet Extends ImageEntity
 		Self.Frame = 0
 		Self.life = 45
 		Self.Rotation = rotation
-		Self.Radius = 4
+		Self.CollisionRadius = 4
 		Self.ResetPosition(position.X, position.Y)
 		Color = Color.White
 	End Method

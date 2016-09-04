@@ -16,14 +16,14 @@ Class Rock Extends ImageEntity
 		Select size
 			Case SIZE_BIG
 				_moveSpeed = Rnd(0.1,0.2)
-				Radius = 14
+				CollisionRadius = 14
 			Case SIZE_MEDIUM
 				_moveSpeed = Rnd(0.3,0.4)
-				Radius = 8
+				CollisionRadius = 8
 				_rotationSpeed = Rnd(-1,1)
 			Case SIZE_SMALL
 				_moveSpeed = Rnd(0.5,0.7)
-				Radius = 4
+				CollisionRadius = 4
 				_rotationSpeed = Rnd(-2,2)
 		End Select
 	End Method

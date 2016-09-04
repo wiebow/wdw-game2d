@@ -26,7 +26,7 @@ Class Player Extends ImageEntity
 		Self.Color = Color.Red
 		velocity = New Vec2f
 		acceleration = New Vec2f
-		Radius = 6
+		CollisionRadius = 6
 	End Method
 
 	Method Reset:Void()
@@ -103,7 +103,7 @@ Class Player Extends ImageEntity
 			b.state = state
 			AddEntity(b , LAYER_BULLETS)
 			AddEntityToGroup(b, "bullets")
-			GAME.PlaySound("bullet")
+			PlaySound("bullet")
 		Endif
 
 		If KeyboardControlHit("TELEPORT") Or JoystickButtonHit("TELEPORT") and warps > 0
@@ -111,7 +111,7 @@ Class Player Extends ImageEntity
 			ResetPosition( Rnd(5, GAME.Width-5), Rnd(5, GAME.Height-5))
 			velocity = New Vec2f
 			acceleration = New Vec2f
-			GAME.PlaySound("warp")
+			PlaySound("warp")
 		Endif
 
 		velocity += acceleration

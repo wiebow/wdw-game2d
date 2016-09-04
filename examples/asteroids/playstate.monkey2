@@ -92,7 +92,7 @@ Class PlayState Extends State
 		Next
 
 		camera.Shake(1)
-		GAME.PlaySound("explosion")
+		PlaySound("explosion")
 	End Method
 
 	Method Render:Void(canvas:Canvas, tween:Double) Override

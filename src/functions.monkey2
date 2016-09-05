@@ -3,33 +3,6 @@
 
 Namespace wdw.game2d
 
-#Rem monkeydoc Returns an array with the individual frames from the source image.
-
-Default image handle is at the center.
-
-#End
-Function GrabAnimation:Image[]( source:Image, w:Int, h:Int, count:Int )
-
-	DebugAssert( source<>null, "GrabAnimation: no source image!!!!")
-
-
-	local anim:= New Image[count]
-	local x:Int = 0
-	local y:int = 0
-
-	For Local c:int = 0 until count
-		anim[c] = New Image( source, New Recti( x,y,x+w,y+h) )
-		anim[c].Handle = New Vec2f(0.5, 0.5)
-		x+=w
-		if x = source.Width
-			x=0
-			y+=h
-			If y = source.Height Then Exit
-		End If
-	Next
-	Return anim
-End Function
-
 #Rem monkeydoc Converts passed degrees to radians.
 
 https://en.wikipedia.org/wiki/Radian
@@ -44,7 +17,6 @@ End Function
 Function RadiansToDegrees:Float( radians:Float )
 	Return radians*180/Pi
 End Function
-
 
 #Rem monkeydoc Plays sound that is stored under passed name.
 
@@ -64,11 +36,20 @@ Function PlaySound:Channel( name:String, volume:Float=1.0, rate:Float=1.0, pan:F
 	Local sound := GAME.GetSound(name)
 	If sound = Null Then RuntimeError("Playsound: Could not find sound with name: " + name)
 
-	If channel = Null Then channel = New Channel
-	channel.Volume = volume
-	channel.Rate = rate
-	channel.Pan = pan
-	channel.Play(sound)
+	If channel = Null
+		channel = sound.Play()
+		channel.Volume = volume
+		channel.Rate = rate
+		channel.Pan = pan
+	Else
+		channel.Volume = volume
+		channel.Rate = rate
+		channel.Pan = pan
+		channel.Play(sound)
+
+	Endif
+'	 Then channel = New Channel
+
 	Return channel
 End Function
 
@@ -105,4 +86,30 @@ End Function
 #End
 Function GetAnimImage:Image[]( name:String )
 	Return GAME.GetAnimImage( name )
+End Function
+
+#Rem monkeydoc Returns an array with the individual frames from the source image.
+
+Default image handle is at the center.
+
+#End
+Function GrabAnimation:Image[]( source:Image, w:Int, h:Int, count:Int )
+
+	DebugAssert( source<>null, "GrabAnimation: no source image!!!!")
+
+	local anim:= New Image[count]
+	local x:Int = 0
+	local y:int = 0
+
+	For Local c:int = 0 until count
+		anim[c] = New Image( source, New Recti( x,y,x+w,y+h) )
+		anim[c].Handle = New Vec2f(0.5, 0.5)
+		x+=w
+		if x = source.Width
+			x=0
+			y+=h
+			If y = source.Height Then Exit
+		End If
+	Next
+	Return anim
 End Function

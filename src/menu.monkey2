@@ -223,6 +223,7 @@ Class Menu
 		Local lines:Int = input.JoystickControls.Count()+5
 '		lines += input.JoystickButtonControls.Count() + 5
 		If input.JoystickDevice = Null then lines = 5
+		If input.JoystickMapping = Null Then lines = 5
 
 		Local ypos:Int = DrawMenuBorder( canvas, lines)
 
@@ -237,7 +238,7 @@ Class Menu
 
 		' and quit when no stick is detected
 
-		If input.JoystickDevice = Null
+		If input.JoystickDevice = Null Or input.JoystickMapping = Null
 			ypos+=fontHeight+4
 			canvas.Color = Color.White
 			GAME.DrawText(canvas, "No Joystick detected!",0, ypos)

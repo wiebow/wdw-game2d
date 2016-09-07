@@ -190,6 +190,7 @@ Class InputManager
 				' don't know this stick!!
 
 				_joystickDeviceMapping = Null
+
 		End Select
 
 	End Method

@@ -4,14 +4,21 @@ Namespace wdw.game2d
 Const DEVICE_KEYBOARD:Int = 0
 Const DEVICE_JOYSTICK:Int = 1
 
+#If  __TARGET__ = "linux"
 
-' the 2nd names for each are the reported names on Windows.
-Const JOYSTICK_XBOX:String = "Microsoft X-Box 360 pad"
-Const JOYSTICK_XBOX2:String = "XInput Controller #1"
-Const JOYSTICK_PS3:String = "Sony PLAYSTATION(R)3 Controller"
-Const JOYSTICK_PS32:String = "PLAYSTATION(R)3 Controller"
-Const JOYSTICK_PS4:String = "Sony Computer Entertainment Wireless Controller"
-Const JOYSTICK_PS42:String = "Wireless Controller"
+	Const JOYSTICK_XBOX:String = "Microsoft X-Box 360 pad"
+	Const JOYSTICK_PS3:String = "Sony PLAYSTATION(R)3 Controller"
+	Const JOYSTICK_PS4:String = "Sony Computer Entertainment Wireless Controller"
+	Const JOYSTICK_COMPPRO:String =  "MOSIC      SPEED-LINK Competition Pro "
+
+#Elseif __TARGET__ = "windows"
+
+	Const JOYSTICK_XBOX:String = "XInput Controller #1"
+	Const JOYSTICK_PS3:String = "PLAYSTATION(R)3 Controller"
+	Const JOYSTICK_PS4:String = "Wireless Controller"
+	Const JOYSTICK_COMPPRO:String = "MOSIC      SPEED-LINK Competition Pro "  ' not sure yet
+
+#End
 
 
 #Rem monkeydoc Input controller.
@@ -178,17 +185,19 @@ Class InputManager
 		_joystickDevice = JoystickDevice.Open( 0 )
 		If Not _joystickDevice Then Return
 
+		Print( "" + _joystickDevice.Name )
+
 		Select _joystickDevice.Name
-			Case JOYSTICK_XBOX, JOYSTICK_XBOX2
+			Case JOYSTICK_XBOX
 				_joystickDeviceMapping = New Xbox360
-			Case JOYSTICK_PS3, JOYSTICK_PS32
+			Case JOYSTICK_PS3
 				_joystickDeviceMapping = New Ps3
-			Case JOYSTICK_PS4, JOYSTICK_PS42
+			Case JOYSTICK_PS4
 				_joystickDeviceMapping = New Ps4
+			Case JOYSTICK_COMPPRO
+				_joystickDeviceMapping = New CProUSB
 			Default
-
-				' don't know this stick!!
-
+				' there is a stick but I don't know this one.
 				_joystickDeviceMapping = Null
 
 		End Select

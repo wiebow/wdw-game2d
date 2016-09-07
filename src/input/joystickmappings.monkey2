@@ -206,3 +206,28 @@ Class Ps4 Extends JoystickMapping
 
 End Class
 
+
+#Rem monkeydoc USB Competition Pro joystick  Speedlink
+#End
+Class CProUSB Extends JoystickMapping
+
+	Method New()
+		_label = "Competition PRO USB"
+		_guid = "030000000b0400003365000000010000"
+
+		_buttons = New String[]("Top Left",  		'0
+								"Top Right",		'1
+								"Bottom Left",		'2
+								"Bottom Right")   	'3
+
+		_axes = New String[]( "Stick Horizontal",	'0
+						      "Stick Vertical")  	'1
+
+		_axesNeutral = New Float[]( 0.0,0.0,0.0,-1.0,-1.0,0.0)',-1.0,0.0,0.0,-1.0)
+
+		_hats = 0
+
+	End Method
+
+End Class
+

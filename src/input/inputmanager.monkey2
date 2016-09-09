@@ -106,7 +106,9 @@ Class InputManager
 	#End
 	Method Update:Bool()
 		If _programming
+
 			If _activeDevice = DEVICE_KEYBOARD
+
 				For Local control:= eachin _keyboardControls.Values
 
 					' if previous control was programmed succesfully
@@ -125,8 +127,18 @@ Class InputManager
 					If _previousProgramResult = True
 						control.Programmed = True
 						_programmedControl = control
+
+						' create a small delay between controls
+						_previousProgramResult = False
+						_programDelay = New Delay(1)
+
 					Endif
-					_previousProgramResult = control.Update()
+
+					if _programDelay <> Null
+						if _programDelay.Update() = True Then _programDelay = Null
+					Else
+						_previousProgramResult = control.Update()
+					endif
 				Next
 			Endif
 			If _previousProgramResult = True Then _programming = False
@@ -184,8 +196,6 @@ Class InputManager
 
 		_joystickDevice = JoystickDevice.Open( 0 )
 		If Not _joystickDevice Then Return
-
-		Print( "" + _joystickDevice.Name )
 
 		Select _joystickDevice.Name
 			Case JOYSTICK_XBOX
@@ -335,7 +345,41 @@ Class InputManager
 
 	Global _instance:InputManager
 
+
+	'place for a delay between control assingments
+	'really useful when 2 axes are defined after each other.
+	Field _programDelay:Delay
+
 End Class
+
+
+
+#Rem monkeydoc @hidden One fire trigger with delay.
+
+Might expand on these later on.
+
+#End
+Class Delay
+
+	Method New(seconds:Int)
+		_start = seconds * 60
+		_counter = _start
+	End Method
+
+	Method Update:Bool()
+		_counter-=1
+		If _counter=0 Then Return true
+		Return false
+	End Method
+
+	Private
+
+	Field _start:Int
+	Field _counter:Int
+
+End Class
+
+
 
 
 '--- helper functions ---------------------

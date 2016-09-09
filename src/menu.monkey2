@@ -43,9 +43,11 @@ Class Menu
 			End Select
 
 		Elseif _mode = MODE_CONTROLS
+
 			If input.Programming
 
 				' update timer that flashes the active control when Programming
+
 				_activeItemTimerCount-=1
 				If _activeItemTimerCount<0
 					_activeItemTimerCount = _activeItemTimerDelay
